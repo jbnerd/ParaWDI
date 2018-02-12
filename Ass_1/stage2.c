@@ -75,29 +75,28 @@ int ierr = MPI_Init ( NULL, NULL );
   else
         n_lo = (int)(limit/p) *id;    
   char *arr = (char*) calloc((n_hi - n_lo) , sizeof(char));
-  prime = 0;
+  
+  //prime = limit;
   //printf ( " \n Array Created %8d , %8d limits.\n", n_hi , n_lo );
   //find next prime
   ptr = n_lo;
   while(1)
-  {     //get next prime  
-        if(id == root)
-        {   while(arr[ptr-n_lo] == 1)
-              {  ptr+=1;    
-                 if(ptr > lsqrt)  // can comment out maybe
-                  {  ptr = limit+1;
-                     break;
-                  }
-               }    
-            prime  = ptr;  
-            ptr += 1;           
-        }
-    
-
+  {  //get next prime  
+     if(id == root)
+     {   while(arr[ptr-n_lo] == 1)
+          {  ptr+=1;    
+             if(ptr > lsqrt)  // can comment out maybe
+             {  ptr = limit+1;
+                break;
+              }
+           }    
+        prime  = ptr;  
+        ptr += 1;           
+      }
     //broadcast prime
     ierr = MPI_Bcast( &prime, 1, MPI_CHAR, root, MPI_COMM_WORLD );
-    //printf ( "  prime is  %d, %d \n" , prime, id);
-    if(prime >= n_hi)
+    printf ( "  prime is  %d, %d \n" , prime, id);
+    if(prime >= n_hi )
         break;
     //eliminate multiples of prime in n_lo to n_hi
     start = (int) ceil((n_lo*1.0)/prime) *  prime ;
@@ -107,6 +106,7 @@ int ierr = MPI_Init ( NULL, NULL );
     for(i = start - n_lo ;i<n_hi - n_lo ; i += prime )
         arr[i] = 1;  
   }
+  printf ( " composites marked  %d\n" ,id);
   /*
 	for(i = 0; i < n_hi - n_lo; i ++){
 		if(arr[i] == 0 && id == 0){
@@ -114,11 +114,11 @@ int ierr = MPI_Init ( NULL, NULL );
 		}else{
 			printf(": %d, %d\n", n_lo + i, id);
 		}
-	}*/
+	}
 
-//for(i = 0; i < n_hi - n_lo; i ++){
-	//printf("::::%d\n", arr[i]);
-//}
+    for(i = 0; i < n_hi - n_lo; i ++){
+	    printf("::::%d\n", arr[i]);
+    }*/
   count = 0;
   // count primes
   if(id != p-1)
@@ -128,9 +128,8 @@ int ierr = MPI_Init ( NULL, NULL );
   else
   { for(i = 0;i<limit-n_lo;i+=1)
     count+= 1 - arr[i];
-  
   }
-  //printf("count : %d , %d\n", count, id);
+  printf("count : %d , %d\n", count, id);
   ierr = MPI_Reduce ( &count, &total_count, 1, MPI_INT, MPI_SUM, root , MPI_COMM_WORLD );
   if ( id == root )
     { wtime = MPI_Wtime( ) - wtime;
@@ -163,7 +162,6 @@ int ierr = MPI_Init ( NULL, NULL );
         for(i = 0; i < limit - 2; i++)
         {   count+=arr[i];
         }
-
         wtime = MPI_Wtime( ) - wtime;
         printf ( "         N        Pi          Time\n" );
         printf ( "\n" );
@@ -171,7 +169,6 @@ int ierr = MPI_Init ( NULL, NULL );
 //	free(arr);
     }
   }
-  
   
 /*   Terminate. Code for performance measurement */
   if ( id == 0 ) 
@@ -181,9 +178,7 @@ int ierr = MPI_Init ( NULL, NULL );
     printf ( "\n" );
     timestamp ( );        
   }
-
   /*   Terminate MPI. */
   ierr = MPI_Finalize ( );
-
   return 0;
 }
