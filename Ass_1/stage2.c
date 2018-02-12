@@ -4,6 +4,7 @@
 # include <mpi.h>
 # include <stdlib.h>
 #define UPPER_BOUND  300
+#define MODE 1  //0 to force entire task in one process
 
 int main ( int argc, char *argv[] );
 
@@ -17,7 +18,6 @@ void timestamp ()
   now = time( NULL );
   tm = localtime( &now );
   len = strftime( time_buffer, TIME_SIZE, "%d %B %Y %I:%M:%S %p", tm );
-  //printf( "%s\n", time_buffer );
   return;
 # undef TIME_SIZE
 }
@@ -32,21 +32,22 @@ int main ( int argc, char *argv[] )
   double wtime;
 
   //setting limit
-  if (argc > 0)
+  if (argc > 0 && MODE == 1)
     limit = (int)atoi(argv[1]);
   else
     limit = UPPER_BOUND;     /*setting upper bound */  
   int lsqrt = (int)ceil(sqrt(limit));
+  
     /*  Initialize MPI. */
   int ierr = MPI_Init ( NULL, NULL );  
     /*  Get the number of processes.*/
   ierr = MPI_Comm_size ( MPI_COMM_WORLD, &p );
     /*  Determine this processes's rank.*/
   ierr = MPI_Comm_rank ( MPI_COMM_WORLD, &id );
-  //--------------------- Start of timer -------
+  //-------Start of timer -------
   if ( id == 0 )
         wtime = MPI_Wtime( );
-  // ---- handling larger cases ----------
+  // ---- handling larger cases ----
   if( lsqrt < (int)ceil( limit / p * 1.0 ) )
   {
   if ( id == 0 )
@@ -60,7 +61,7 @@ int main ( int argc, char *argv[] )
     printf ( "\n" );
   }
   int root = 0;
-  // ------------ create arrays ----------
+  // ------- create arrays ------
   if (id != p-1)
     n_hi = (int)(limit/p) *(id+1);
   else 
@@ -70,9 +71,7 @@ int main ( int argc, char *argv[] )
   else
         n_lo = (int)(limit/p) *id;    
   char *arr = (char*) calloc((n_hi - n_lo) , sizeof(char));
-  
-  //prime = limit;
-  //printf ( " \n Array Created %8d , %8d limits.\n", n_hi , n_lo );
+
   //find next prime
   ptr = n_lo;
   prime = 3;
@@ -89,33 +88,21 @@ int main ( int argc, char *argv[] )
         prime  = ptr;  
         ptr += 1;           
       }
+      
     //broadcast prime
     int er_a = prime;
     ierr = MPI_Bcast( &prime, 1, MPI_INT, root, MPI_COMM_WORLD );
     if(prime >= n_hi )
         break;
+        
     //eliminate multiples of prime in n_lo to n_hi
     start = (int) ceil((n_lo*1.0)/prime) *  prime ;
-    
     if(id == root)
         start += prime;
     for(i = start - n_lo ;i<n_hi - n_lo ; i += prime )
         arr[i] = 1;  
   }
-  //printf ( " composites marked  %d\n" ,id);
-  /*
-	for(i = 0; i < n_hi - n_lo; i ++){
-		if(arr[i] == 0 && id == 0){
-			printf(" : %d, %d\n", i + 2, id);
-		}else{
-			printf(": %d, %d\n", n_lo + i, id);
-		}
-	}
 
-    for(i = 0; i < n_hi - n_lo; i ++){
-	    printf("::::%d\n", arr[i]);
-    }*/
-  count = 0;
   // count primes
   if(id != p-1)
   {  for(i = 0;i<n_hi-n_lo;i+=1)
@@ -125,12 +112,10 @@ int main ( int argc, char *argv[] )
   { for(i = 0;i<limit-n_lo;i+=1)
     count+= 1 - arr[i];
   }
-  //printf("count : %d , %d\n", count, id);
   ierr = MPI_Reduce ( &count, &total_count, 1, MPI_INT, MPI_SUM, root , MPI_COMM_WORLD );
   if ( id == root )
     { wtime = MPI_Wtime( ) - wtime;
       printf ( "         N        Pi          Time\n" );
-      printf ( "\n" );
       printf ("  %8d  %8d  %14f\n", limit, total_count, wtime );
     }
 //	free(arr);
@@ -149,25 +134,21 @@ int main ( int argc, char *argv[] )
         char *arr = (char*) calloc((limit - 1) , sizeof(char));
         ptr = 2;
         while(ptr<=lsqrt)
-        {   
-            if(arr[ptr] == 0)
-            {   for( i = 2*ptr - 2; i <= limit - 2; i += prime )
+        {   if(arr[ptr] == 0)
+            {   for( i = 2*ptr - 2; i <= limit - 2; i += ptr )
                         arr[i] = 1;                     
             }
             ptr+=1;
-            
         }
+        printf ( " Marked C\n" );
         for(i = 0; i < limit - 2; i++)
-        {   count+=arr[i];
-        }
+           count+=arr[i];
         wtime = MPI_Wtime( ) - wtime;
         printf ( "         N        Pi          Time\n" );
-        printf ( "\n" );
         printf ("  %8d  %8d  %14f\n", limit, total_count, wtime );
 //	free(arr);
     }
   }
-  
 /*   Terminate. Code for performance measurement */
   if ( id == 0 ) 
   { printf ( "\n");         
