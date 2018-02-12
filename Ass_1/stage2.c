@@ -109,8 +109,15 @@ int main ( int argc, char *argv[] )
   
   printf ( " marked composite.\n" );
   // count primes
-  for(i = 0;i<n_hi-n_lo;i+=1)
+  if(id = p-1)
+  {  for(i = 0;i<n_hi-n_lo;i+=1)
     count+= 1 - arr[i];
+  }
+  else
+  { for(i = 0;i<limit-n_lo;i+=1)
+    count+= 1 - arr[i];
+  
+  }
   free(arr);
   ierr = MPI_Reduce ( &count, &total_count, 1, MPI_INT, MPI_SUM, root , MPI_COMM_WORLD );
   if ( id == root )
