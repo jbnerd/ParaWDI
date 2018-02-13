@@ -6,7 +6,8 @@
 # include <math.h>
 # include <mpi.h>
 # include <stdlib.h>
-#include <string.h>
+# include <string.h>
+
 
 void decompose_domain(int domain_size, int world_rank, int world_size, int* subdomain_start, int* subdomain_size) {
     /*******************************************************************
@@ -15,11 +16,13 @@ void decompose_domain(int domain_size, int world_rank, int world_size, int* subd
     *           [1] Argument domain_size: Size of the over all domain (In this case value of N)
     *
     */
-    if (world_size > domain_size) {
-       MPI_Abort(MPI_COMM_WORLD, 1);
-    }
+    
     *subdomain_start = domain_size / world_size * world_rank;
     *subdomain_size = domain_size / world_size;
+    if (world_rank == 0){
+        *subdomain_start = 2;
+        *subdomain_size -= 1;
+    }
     if (world_rank == world_size - 1) {
         // Give remainder to last process
         *subdomain_size += domain_size % world_size;
@@ -55,16 +58,18 @@ void next_prime(char* arr, int curr_prime, int* new_prime, int limit){
     */
     int i = curr_prime - 2 + 1;
     *new_prime = -1;
-    while(arr[i] == 1 && i < limit - 2) i++;
-    if ( i < limit - 2) *new_prime = i + 2;
+    while(arr[i] == 1 && i < limit ) i++;
+    if ( i < limit ) *new_prime = i + 2;
 }
 
 int main(int argc, char** argv){
     int domain_size;
     
     // handle having less than required arguments;
-
-    domain_size = (int)atoi(argv[1]);
+    if (argc > 0)
+        domain_size = (int)atoi(argv[1]);
+    else
+        domain_size = 1000000;
 
     MPI_Init(NULL, NULL);
     int world_size;
@@ -75,41 +80,80 @@ int main(int argc, char** argv){
     int limit = (int)ceil(sqrt(domain_size));
     int root = 0;
     int subdomain_start, subdomain_size;
+    double wtime;
+
+    if (world_rank == root)
+        wtime = MPI_Wtime();
 
     decompose_domain(domain_size, world_rank, world_size, &subdomain_start, &subdomain_size);
     
-    if (world_rank == root){
-        subdomain_start = 2;
-        subdomain_size -= 2;
-    }
+    
 
     char *arr = (char*) malloc((subdomain_size)* sizeof(char));
-
-    //printf("Arrays Created with start: %d and size: %d\n", subdomain_start, subdomain_size);
+    memset(arr, 0, subdomain_size*sizeof(char));
+    // printf("Arrays Created with start: %d and size: %d\n", subdomain_start, subdomain_size);
 
     int curr_prime, prime = 1;
     while(1){
         if(world_rank == 0){
             curr_prime = prime;
             next_prime(arr, curr_prime, &prime, limit);
+            // printf("Current Prime is %d, and in process %d\n", prime, world_rank);        
         }
         MPI_Bcast(&prime, 1, MPI_INT, root, MPI_COMM_WORLD);
         if(prime == -1) break;        
-        //printf("Current Prime is %d, and in process %d\n", prime, world_rank);
         mark_composites(arr, subdomain_start, subdomain_size, prime, world_rank);
     }
-    printf("Composite marked!\n");
+    // printf("Composite marked!\n");
     
-    int i, count = 0, total_count;
+    int i, count = 0, total_count = 0;
     for(i = 0; i < subdomain_size; i ++){
         if(arr[i] != 1){
-            // printf("%d\n", i+2);
             count += 1;
         }
     }
-    free(arr);
-    MPI_Reduce(&count, &total_count, 1, MPI_INT, MPI_SUM, root, MPI_COMM_WORLD);
+
+    int *rcounts, *dsply;
+    if (world_rank == root){
+        rcounts = (int*) malloc(world_size * sizeof(int));
+        dsply = (int*) malloc(world_size * sizeof(int));
+    }
+
+    MPI_Gather(&count, 1, MPI_INT, rcounts, 1, MPI_INT, root, MPI_COMM_WORLD);
+
+    int *primes = (int*) malloc(count * sizeof(int));
+    int k = 0;
+    for(i = 0; i < subdomain_size; i ++){
+        if(arr[i] != 1){
+            primes[k] = i + subdomain_start;
+            k++;
+        }
+    }
+
+    if(world_rank == root){
+        for(i=0; i < world_size; i++){
+            dsply[i] = total_count;            
+            total_count += rcounts[i];
+        }
+    }
+
+    int* all_primes;
+    if (world_rank == root)
+        all_primes = (int*) malloc(total_count * sizeof(int));
     
-    if(world_rank == root) printf("Total count: %d\n", total_count);
+    MPI_Gatherv(primes, count, MPI_INT, all_primes, rcounts, dsply, MPI_INT, root, MPI_COMM_WORLD);
+    
+    // Uncomment the following code to print all the primes. 
+    
+    // for(i = 0; i < total_count; i++){
+    //     printf("%d\n", all_primes[i]);
+    // }
+    
+    free(arr);
+    
+    if(world_rank == root){
+        wtime = MPI_Wtime() - wtime;
+        printf("Total count: %d, Total Time taken: %f\n", total_count, wtime);
+    }
     MPI_Finalize();
 }
