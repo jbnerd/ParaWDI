@@ -2,5 +2,5 @@
 
 ## Team
 * Arka Talukdar
-* Abhisekh V. Joshi
+* [Abhishek V Joshi](https://github.com/jbnerd)
 * [Shyamal Vaderia](https://github.com/svaderia)
