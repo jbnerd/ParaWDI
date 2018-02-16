@@ -24,6 +24,8 @@ TrieNode* getNode(void){
  
 TrieNode* insert(TrieNode *root, char *key){
     int depth, len = strlen(key), index;
+
+    root -> frequency ++;
  
     TrieNode *iter = root;
  

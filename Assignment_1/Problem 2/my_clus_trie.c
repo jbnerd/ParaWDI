@@ -25,6 +25,7 @@ TrieNode* getNode(void){
  
 TrieNode* insert_clus(TrieNode *root, char *key, int frequency, char* doc_name){
     int depth, len = strlen(key), index;
+    root -> frequency += frequency;
  
     TrieNode *iter = root;
  
