@@ -17,7 +17,7 @@ struct TrieNode{
 };
 typedef struct TrieNode TrieNode;
 
-TrieNode* insert(TrieNode *root, const char *key);
+TrieNode* insert(TrieNode *root, char *key, int frequency, char* doc_name);
 
 bool search(struct TrieNode *root, const char *key);
 
