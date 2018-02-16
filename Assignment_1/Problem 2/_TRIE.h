@@ -15,9 +15,12 @@ struct TrieNode{
     unsigned int frequency;
     List* list;
 };
+
 typedef struct TrieNode TrieNode;
 
-TrieNode* insert(TrieNode *root, char *key, int frequency, char* doc_name);
+TrieNode* insert_clus(TrieNode *root, char *key, int frequency, char* doc_name);
+
+TrieNode* insert_doc(TrieNode *root, char *key);
 
 bool search(struct TrieNode *root, const char *key);
 
