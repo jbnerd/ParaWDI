@@ -2,6 +2,8 @@
 #include "_LINKED_LIST.h"
 #include <string.h>
 
+#define _CLUS_TRIE
+
 #define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
  
 #define CHAR_TO_INDEX(c) ((int)c - (int)'a')
@@ -21,7 +23,7 @@ TrieNode* getNode(void){
     return temp;
 }
  
-TrieNode* insert(TrieNode *root, char *key, int frequency, char* doc_name){
+TrieNode* insert_clus(TrieNode *root, char *key, int frequency, char* doc_name){
     int depth, len = strlen(key), index;
  
     TrieNode *iter = root;
