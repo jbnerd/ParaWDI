@@ -48,7 +48,7 @@ void cluster_merge(TrieNode *croot1,TrieNode *croot2)
     int i = 0;  
     if( croot2 -> end )
     {
-        croot-> list = mergeLists( croot1->list , croot2->list );
+        croot1-> list = mergeLists( croot1->list , croot2->list );
     }   
     for( i = 0; i < ALPHABET_SIZE; i++ )
     {

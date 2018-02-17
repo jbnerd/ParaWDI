@@ -112,8 +112,8 @@ void print_list(List* list){
 List* mergeLists(List* list1, List* list2)
 {
 
-
-
+//pls insert merging code here!!
+return list1;
 
 }
 
