@@ -4,6 +4,8 @@
 #include<dirent.h>
 #include "_TOKENIZER.h"
 
+int offset = 0;
+bool eof = false;
 
 FILE *getStream(FILE *fp, buffer b, int k)
 {	int count = -1;
@@ -79,24 +81,24 @@ char** list_dir(char* folder_name, int* file_count){
 }
 
 
-int main(){
-    buffer b = (buffer) malloc(4096 * sizeof(char));
-    int k = 4096;
-    memset(b, 0, k);
-    int i = 0;
-    char* temp;
-    FILE* fp = fopen("test", "r");
+// int main(){
+//     buffer b = (buffer) malloc(4096 * sizeof(char));
+//     int k = 4096;
+//     memset(b, 0, k);
+//     int i = 0;
+//     char* temp;
+//     FILE* fp = fopen("test", "r");
 
-    // while(1){
-    //     printf("%s\n", getWord(fp, b, k));
-    //     if( offset >= strlen(b) && eof ) break;        
-    // }
+//     // while(1){
+//     //     printf("%s\n", getWord(fp, b, k));
+//     //     if( offset >= strlen(b) && eof ) break;        
+//     // }
     
-    int file_count;
-    char** filelist = list_dir(".", &file_count);
-    // printf("%d", file_count);
-    for(i=0; i < file_count; i++){
-        printf("%s\n", filelist[i]);
-    }
+//     int file_count;
+//     char** filelist = list_dir(".", &file_count);
+//     // printf("%d", file_count);
+//     for(i=0; i < file_count; i++){
+//         printf("%s\n", filelist[i]);
+//     }
 
-}
+// }

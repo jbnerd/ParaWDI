@@ -6,9 +6,9 @@
 #ifndef _TOKEN
 #define _TOKEN
 
-int offset = 0;
+extern int offset;
 
-bool eof = false;
+extern bool eof;
 
 typedef char* buffer;
 
