@@ -25,7 +25,7 @@ TrieNode* getNode(void){
  
 TrieNode* insert_clus(TrieNode *root, char *key, int frequency, char* doc_name){
     int depth, len = strlen(key), index;
-    root -> frequency += frequency;
+    //root -> frequency += frequency;
  
     TrieNode *iter = root;
  
@@ -36,11 +36,11 @@ TrieNode* insert_clus(TrieNode *root, char *key, int frequency, char* doc_name){
         } 
         iter = iter -> children[index];
     }
-    iter -> frequency += frequency;
+    //iter -> frequency += frequency;
     iter -> end = true;
 
     Element* temp = (Element*) malloc(sizeof(Element));
-    temp -> frequency = frequency;
+    //temp -> frequency = frequency;
     temp -> doc_name = (char*) malloc((strlen(doc_name) + 1) * sizeof(char));
     strcpy(temp -> doc_name, doc_name);
     iter -> list = insert_in_order(iter -> list, temp);

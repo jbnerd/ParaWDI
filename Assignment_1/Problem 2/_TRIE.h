@@ -7,6 +7,13 @@
 #ifndef _TRIE
 #define _TRIE
 
+struct ArrNode{
+    unsigned int frequency;
+    List* list;
+};
+
+typedef struct ArrNode ArrNode;
+
 #define ALPHABET_SIZE 26
 
 struct TrieNode{
