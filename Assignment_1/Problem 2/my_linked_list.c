@@ -103,7 +103,7 @@ bool is_empty(List* list){
 void print_list(List* list){
 	Node* temp = list -> head;
 	while(temp != NULL){
-		printf("%d\t", temp -> ele -> frequency);
+		printf("%d::%s\n", temp -> ele -> frequency, temp -> ele -> doc_name);
 		temp = temp -> next;
 	}
 	printf("\n");
