@@ -50,6 +50,20 @@ List* insert_in_order(List* list, Element* data){
     }
 }
 
+List* add_to_end(List* list, Element* data){
+    Node* new_node = create_node(data);
+    if(list -> size == 0){
+        list -> head = new_node;
+        list -> tail = new_node;
+        list -> size ++;
+    }else{
+        list -> tail -> next = new_node;
+        list -> tail = new_node;
+        list -> size ++;
+    }
+    return list;
+}
+
 List* delete_from_end(List* list){
 	Node* del_node = list -> tail;
 	Node* temp = list -> head;
@@ -109,12 +123,54 @@ void print_list(List* list){
 	printf("\n");
 }
 
-List* mergeLists(List* list1, List* list2)
-{
+List* mergeLists(List* list1, List* list2){
+    List* ret = create_list();
+    Node* iter1 = list1 -> head;
+    Node* iter2 = list2 -> head;
 
-//pls insert merging code here!!
-return list1;
+    while(iter1 != NULL && iter2 != NULL){
+        if(iter1 -> ele -> frequency > iter2 -> ele -> frequency){
+            if(!ret -> head){
+                ret -> head = iter1;
+                ret -> tail = iter1;
+                iter1 = iter1 -> next;
+                ret -> tail -> next = NULL;
+            }else{
+                ret -> tail -> next = iter1;
+                ret -> tail = iter1;
+                iter1 = iter1 -> next;
+                ret -> tail -> next = NULL;
+            }
+        }else{
+            if(!ret -> head){
+                ret -> head = iter2;
+                ret -> tail = iter2;
+                iter2 = iter2 -> next;
+                ret -> tail -> next = NULL;
+            }else{
+                ret -> tail -> next = iter2;
+                ret -> tail = iter2;
+                iter2 = iter2 -> next;
+                ret -> tail -> next = NULL;
+            }
+        }
+    }
 
+    if(iter1 == NULL){
+        ret -> tail -> next = iter2;
+        while(ret -> tail -> next != NULL){
+            ret -> tail = ret -> tail -> next;
+        }
+    }
+
+    if(iter2 == NULL){
+        ret -> tail -> next = iter1;
+        while(ret -> tail -> next != NULL){
+            ret -> tail = ret -> tail -> next;
+        }
+    }
+
+    return ret;
 }
 
 /*

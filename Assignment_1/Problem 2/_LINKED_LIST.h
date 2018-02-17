@@ -32,6 +32,8 @@ bool is_empty(List* list);
 
 List* insert_in_order(List* list, Element* data);
 
+List* add_to_end(List* list, Element* data);
+
 List* mergeLists(List* list1, List* list2);
 
 List* delete_from_end(List* list);
