@@ -16,12 +16,11 @@ void plug(TrieNode *cnode, char* doc_name, int frequency)
 }
 
 
-int dfs(TrieNode *cnode,TrieNode *dnode, char* doc_name )
-{   int i = 0, j = 0;  
-    if( dnode -> end )
+TrieNode* dfs(TrieNode *cnode,TrieNode *dnode, char* doc_name )
+{   int i = 0;  
+    if( dnode -> end)
     {
         plug( cnode , doc_name , dnode -> frequency );
-        j+=1;
     }
     
     for( i = 0; i < ALPHABET_SIZE; i++ )
@@ -29,17 +28,16 @@ int dfs(TrieNode *cnode,TrieNode *dnode, char* doc_name )
         if( dnode -> children[i] )
         {
             if (!cnode -> children[i])
-                cnode -> children[i] = getNode();
-            j += dfs(cnode -> children[i],dnode -> children[i], doc_name );
+                cnode -> children[i] = get_clus_Node();
+            cnode -> children[i] = dfs(cnode -> children[i],dnode -> children[i], doc_name );
         }     
     }
-    return j;
+    return cnode;
 }
 
-
-void insert_doc_in_clus(TrieNode *croot,TrieNode *droot, char* doc_name )
+TrieNode* insert_doc_in_clus(TrieNode *croot,TrieNode *droot, char* doc_name )
 {   
-    croot -> frequency += dfs( croot, droot, doc_name );
+    return dfs( croot, droot, doc_name );
 }
 
 
@@ -55,19 +53,8 @@ void cluster_merge(TrieNode *croot1,TrieNode *croot2)
         if( croot2 -> children[i] )
         {
             if (!croot1 -> children[i])
-                croot1 -> children[i] = getNode();
+                croot1 -> children[i] = get_clus_Node();
             cluster_merge( croot1 -> children[i],croot2 -> children[i] );
         }     
     }
 }
-
-int main()
-{
-
-}
-
-
-
-
-
-
