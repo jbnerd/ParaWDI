@@ -109,6 +109,14 @@ void print_list(List* list){
 	printf("\n");
 }
 
+List* mergeLists(List* list1, List* list2)
+{
+
+
+
+
+}
+
 /*
 int main(){
 

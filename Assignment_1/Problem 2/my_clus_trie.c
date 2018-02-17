@@ -72,6 +72,7 @@ char* convert_to_lower(char* str){
     return str;
 }
 
+/*
 int main(){
     // Input keys (use only 'a' through 'z' and lower case)
     char keys[][8] = {"the", "a", "there", "answer", "any", "by", "bye", "their"};
@@ -93,4 +94,4 @@ int main(){
     printf("%s --- %s\n", "these", output[search(root, "there")] );
  
     return 0;
-}
+}*/
