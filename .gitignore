@@ -51,4 +51,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# By Users
 .vscode
+exe
