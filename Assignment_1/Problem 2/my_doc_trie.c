@@ -8,7 +8,7 @@
  
 #define CHAR_TO_INDEX(c) ((int)c - (int)'a')
 
-TrieNode* getNode(void){
+TrieNode* get_doc_Node(void){
     TrieNode *temp = (TrieNode*) malloc(sizeof(TrieNode));
  
     if (temp){
@@ -22,17 +22,17 @@ TrieNode* getNode(void){
     return temp;
 }
  
-TrieNode* insert(TrieNode *root, char *key){
+TrieNode* doc_insert(TrieNode *root, char *key){
     int depth, len = strlen(key), index;
 
-    root -> frequency ++;
+    // root -> frequency ++;
  
     TrieNode *iter = root;
  
     for (depth = 0; depth < len; depth++){
         index = CHAR_TO_INDEX(key[depth]);
         if (!iter -> children[index]){
-            iter -> children[index] = getNode();
+            iter -> children[index] = get_doc_Node();
         } 
         iter = iter -> children[index];
     }
@@ -42,7 +42,7 @@ TrieNode* insert(TrieNode *root, char *key){
     return root;
 }
  
-bool search(struct TrieNode *root, const char *key){
+bool doc_search(struct TrieNode *root, const char *key){
     int depth, len = strlen(key), index;
     TrieNode* iter = root;
  
@@ -53,15 +53,30 @@ bool search(struct TrieNode *root, const char *key){
         }
         iter = iter -> children[index];
     }
+    printf("%d\n", iter->frequency);
     return (iter != NULL && iter -> end);
 }
 
-char* convert_to_lower(char* str){
-    int i;
-    for(i = 0; str[i] != '\0'; i++){
-        if(str[i] >= 'A' && str[i] <= 'Z'){
-            str[i] += 'a' - 'A';
-        }
-    }
-    return str;
-}
+
+// int main(){
+//     // Input keys (use only 'a' through 'z' and lower case)
+//     char keys[][8] = {"the", "a", "there", "answer", "any", "by", "bye", "their","the", "a", "there","the", "a", };
+//     char output[][32] = {"Not present in trie", "Present in trie"};
+ 
+//     TrieNode *root = get_doc_Node();
+//     int i;
+//     for (i = 0; i < ARRAY_SIZE(keys); i++){
+//         doc_insert(root, keys[i]);
+//     }
+ 
+//     // Search for different keys
+//     printf("%s --- %s\n", "the", output[doc_search(root, "the")] );
+//     printf("%s --- %s\n", "these", output[doc_search(root, "these")] );
+//     printf("%s --- %s\n", "their", output[doc_search(root, "their")] );
+//     printf("%s --- %s\n", "thaw", output[doc_search(root, "thaw")] );
+
+//     printf("%s --- %s\n", "a", output[doc_search(root, "a")] );
+//     printf("%s --- %s\n", "there", output[doc_search(root, "there")] );
+ 
+//     return 0;
+// }

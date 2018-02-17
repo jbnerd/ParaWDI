@@ -25,12 +25,22 @@ struct TrieNode{
 
 typedef struct TrieNode TrieNode;
 
-TrieNode* getNode(void);
+TrieNode* get_clus_Node(void);
 
-TrieNode* insert_clus(TrieNode *root, char *key, int frequency, char* doc_name);
+TrieNode* get_doc_Node(void);
 
-TrieNode* insert_doc(TrieNode *root, char *key);
+TrieNode* doc_insert(TrieNode *root, char *key);
 
-bool search(struct TrieNode *root, const char *key);
+TrieNode* clus_insert(TrieNode *root, char *key, int frequency, char* doc_name);
+
+bool doc_search(struct TrieNode *root, const char *key);
+
+bool clus_search(struct TrieNode *root, const char *key);
+
+void cluster_merge(TrieNode *croot1,TrieNode *croot2);
+
+char* convert_to_lower(char* str);
+
+TrieNode * insert_doc_in_clus(TrieNode *croot, TrieNode *droot, char* doc_name );
 
 #endif

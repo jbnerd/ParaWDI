@@ -8,7 +8,7 @@
  
 #define CHAR_TO_INDEX(c) ((int)c - (int)'a')
 
-TrieNode* getNode(void){
+TrieNode* get_clus_Node(void){
     TrieNode *temp = (TrieNode*) malloc(sizeof(TrieNode));
  
     if (temp){
@@ -23,7 +23,7 @@ TrieNode* getNode(void){
     return temp;
 }
  
-TrieNode* insert_clus(TrieNode *root, char *key, int frequency, char* doc_name){
+TrieNode* clus_insert(TrieNode *root, char *key, int frequency, char* doc_name){
     int depth, len = strlen(key), index;
     //root -> frequency += frequency;
  
@@ -32,7 +32,7 @@ TrieNode* insert_clus(TrieNode *root, char *key, int frequency, char* doc_name){
     for (depth = 0; depth < len; depth++){
         index = CHAR_TO_INDEX(key[depth]);
         if (!iter -> children[index]){
-            iter -> children[index] = getNode();
+            iter -> children[index] = get_clus_Node();
         } 
         iter = iter -> children[index];
     }
@@ -47,7 +47,7 @@ TrieNode* insert_clus(TrieNode *root, char *key, int frequency, char* doc_name){
     return root;
 }
  
-bool search(struct TrieNode *root, const char *key){
+bool clus_search(struct TrieNode *root, const char *key){
     int depth, len = strlen(key), index;
     TrieNode* iter = root;
  
@@ -78,7 +78,7 @@ int main(){
     char keys[][8] = {"the", "a", "there", "answer", "any", "by", "bye", "their"};
     char output[][32] = {"Not present in trie", "Present in trie"};
  
-    TrieNode *root = getNode();
+    TrieNode *root = get_clus_Node();
     int i;
     for (i = 0; i < ARRAY_SIZE(keys); i++){
         insert(root, keys[i], i, "lol");
