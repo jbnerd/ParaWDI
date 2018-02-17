@@ -25,6 +25,8 @@ struct TrieNode{
 
 typedef struct TrieNode TrieNode;
 
+TrieNode* getNode(void);
+
 TrieNode* insert_clus(TrieNode *root, char *key, int frequency, char* doc_name);
 
 TrieNode* insert_doc(TrieNode *root, char *key);
