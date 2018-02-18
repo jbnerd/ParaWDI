@@ -10,6 +10,7 @@
 
 TrieNode* get_doc_Node(void){
     TrieNode *temp = (TrieNode*) malloc(sizeof(TrieNode));
+    temp -> children = (TrieNode**) malloc(ALPHABET_SIZE * sizeof(TrieNode*));
  
     if (temp){
         int i;
