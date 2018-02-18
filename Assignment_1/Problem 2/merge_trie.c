@@ -5,11 +5,11 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-void plug(TrieNode *cnode, char* doc_name, int frequency)
+void plug(TrieNode *cnode, char* doc_name, unsigned int frequency)
 {
     Element* temp = (Element*) malloc(sizeof(Element));
     temp -> doc_name = (char*) malloc((strlen(doc_name) + 1) * sizeof(char));
-    temp -> frequency += frequency;
+    temp -> frequency = frequency;
     strcpy(temp -> doc_name, doc_name);
     cnode -> list = insert_in_order(cnode -> list, temp);
     cnode -> end = true;
@@ -32,7 +32,6 @@ TrieNode* dfs(TrieNode *cnode,TrieNode *dnode, char* doc_name )
             cnode -> children[i] = dfs(cnode -> children[i],dnode -> children[i], doc_name );
         }     
     }
-    free(dnode);
     return cnode;
 }
 
@@ -58,4 +57,15 @@ void cluster_merge(TrieNode *croot1,TrieNode *croot2)
             cluster_merge( croot1 -> children[i],croot2 -> children[i] );
         }     
     }
+}
+
+
+int doc_free(TrieNode* dnode){
+    int i,k=1;
+    for(i=0; i< ALPHABET_SIZE; i++){
+        if(dnode -> children[i])
+            k+=doc_free( dnode -> children[i]);
+    }
+    free(dnode);
+    return k;
 }

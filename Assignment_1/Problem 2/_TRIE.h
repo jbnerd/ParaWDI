@@ -33,7 +33,7 @@ TrieNode* get_doc_Node(void);
 
 TrieNode* doc_insert(TrieNode *root, char *key);
 
-TrieNode* clus_insert(TrieNode *root, char *key, int frequency, char* doc_name);
+TrieNode* clus_insert(TrieNode *root, char *key, unsigned int frequency, char* doc_name);
 
 bool doc_search(struct TrieNode *root, const char *key);
 
@@ -50,5 +50,7 @@ void serialize_trie(TrieNode* root, FILE** fp1, FILE** fp2, int child_index);
 TrieNode* deserialize_trie(TrieNode* root, FILE** fp1, FILE** fp2);
 
 char index_to_char(int index);
+
+int doc_free(TrieNode* dnode);
 
 #endif
