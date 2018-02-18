@@ -82,11 +82,11 @@ int main(){
     char output[][32] = {"Not present in trie", "Present in trie"};
     char keys[][4] = {"a", "any", "by", "bye"};
 
-    TrieNode *root = get_clus_Node();
-    int i;
-    for (i = 0; i < ARRAY_SIZE(keys); i++){
-        clus_insert(root, keys[i], i, "lol");
-    }
+//     TrieNode *root = get_clus_Node();
+//     int i;
+//     for (i = 0; i < ARRAY_SIZE(keys); i++){
+//         clus_insert(root, keys[i], i, "lol");
+//     }
 
     FILE* fptr1 = fopen("serial_trie.txt", "w+");
     FILE* fptr2 = fopen("serial_lists.txt", "w+");
@@ -127,9 +127,8 @@ int main(){
     // printf("%s --- %s\n", "these", output[search(root, "these")] );
     // printf("%s --- %s\n", "their", output[search(root, "their")] );
     // printf("%s --- %s\n", "thaw", output[search(root, "thaw")] );
-
-    // printf("%s --- %s\n", "these", output[search(root, "a")] );
-    // printf("%s --- %s\n", "these", output[search(root, "there")] );
+//     // printf("%s --- %s\n", "these", output[search(root, "a")] );
+//     // printf("%s --- %s\n", "these", output[search(root, "there")] );
  
     return 0;
 }
