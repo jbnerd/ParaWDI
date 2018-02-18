@@ -35,11 +35,11 @@ TrieNode* clus_insert(TrieNode *root, char *key, int frequency, char* doc_name){
         } 
         iter = iter -> children[index];
     }
-    //iter -> frequency += frequency;
+    // iter -> frequency += frequency;
     iter -> end = true;
 
     Element* temp = (Element*) malloc(sizeof(Element));
-    //temp -> frequency = frequency;
+    temp -> frequency = frequency;
     temp -> doc_name = (char*) malloc((strlen(doc_name) + 1) * sizeof(char));
     strcpy(temp -> doc_name, doc_name);
     iter -> list = insert_in_order(iter -> list, temp);
@@ -75,7 +75,7 @@ char index_to_char(int index){
     return index + 'a';
 }
 
-
+/*
 int main(){
     // Input keys (use only 'a' through 'z' and lower case)
     // char keys[][8] = {"the", "a", "there", "answer", "any", "by", "bye", "their"};
@@ -88,23 +88,40 @@ int main(){
         clus_insert(root, keys[i], i, "lol");
     }
 
-    FILE* fptr = fopen("serialize_test.txt", "w+");
-    serialize_trie(root, fptr, -1);
-    fprintf(fptr, "\n");
-    fclose(fptr);
-
-    fptr = fopen("serialize_test.txt", "r");
-    FILE* fptr1 = fopen("test.txt", "w+");
-    TrieNode* de_root;
-    de_root = deSerialize(de_root, fptr);
-    serialize_trie(de_root, fptr1, -1);
-    fclose(fptr);
+    FILE* fptr1 = fopen("serial_trie.txt", "w+");
+    FILE* fptr2 = fopen("serial_lists.txt", "w+");
+    serialize_trie(root, &fptr1, &fptr2, -1);
     fclose(fptr1);
+    fclose(fptr2);
 
-    printf("\n%d\n", clus_search(de_root, "answer"));
-    printf("%d\n", clus_search(de_root, "bye"));
-    printf("%d\n", clus_search(de_root, "by"));
+    fptr1 = fopen("serial_trie.txt", "r");
+    fptr2 = fopen("serial_lists.txt", "r");
+    // FILE* fptr_temp = fopen("test.txt", "w+");
+    TrieNode* de_root;
+    de_root = deserialize_trie(de_root, &fptr1, &fptr2);
+    // serialize_trie(de_root, fptr_temp, -1);
+    fclose(fptr1);
+    fclose(fptr2);
+    // fclose(fptr_temp);
+
+    printf("%d\n\n", clus_search(de_root, "answer"));
+    printf("%d\n", clus_search(de_root, "a"));
     printf("%d\n", clus_search(de_root, "any"));
+    printf("%d\n", clus_search(de_root, "by"));
+    printf("%d\n", clus_search(de_root, "bye"));
+
+    // fptr2 = fopen("serial_lists.txt", "r");
+    // List* list = deserialize_list(fptr2);
+    // print_list(list);
+    // List* list1 = deserialize_list(fptr2);
+    // print_list(list1);
+    // List* list2 = deserialize_list(fptr2);
+    // print_list(list2);
+    // List* list3 = deserialize_list(fptr2);
+    // print_list(list3);
+    // List* list4 = deserialize_list(fptr2);
+    // print_list(list4);
+    // fclose(fptr2);
     // Search for different keys
     // printf("%s --- %s\n", "the", output[search(root, "the")] );
     // printf("%s --- %s\n", "these", output[search(root, "these")] );
@@ -116,3 +133,4 @@ int main(){
  
     return 0;
 }
+*/

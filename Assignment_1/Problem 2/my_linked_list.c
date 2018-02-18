@@ -173,6 +173,7 @@ List* mergeLists(List* list1, List* list2){
     return ret;
 }
 
+
 /*
 int main(){
 
@@ -185,11 +186,12 @@ int main(){
 	data2 -> frequency = 3;
 
 	List* list = create_list();
-	list = insert_in_order(list, data);
-	list = insert_in_order(list, data1);
-	list = insert_in_order(list, data2);
+	list = add_to_end(list, data);
+	list = add_to_end(list, data1);
+	list = add_to_end(list, data2);
 	print_list(list);
 
 
 	return 0;
-}*/
+}
+*/

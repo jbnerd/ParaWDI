@@ -45,9 +45,9 @@ char* convert_to_lower(char* str);
 
 TrieNode * insert_doc_in_clus(TrieNode *croot, TrieNode *droot, char* doc_name );
 
-void serialize_trie(TrieNode* root, FILE *fp, int child_index);
+void serialize_trie(TrieNode* root, FILE** fp1, FILE** fp2, int child_index);
 
-TrieNode* deSerialize(TrieNode* root, FILE *fp);
+TrieNode* deserialize_trie(TrieNode* root, FILE** fp1, FILE** fp2);
 
 char index_to_char(int index);
 

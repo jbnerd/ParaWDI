@@ -42,4 +42,8 @@ void print_list(List* list);
 
 List* delete_from_front(List* list);
 
+void serialize_list(List* list, FILE** fp);
+
+List* deserialize_list(FILE** fp);
+
 #endif

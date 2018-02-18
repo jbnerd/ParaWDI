@@ -25,8 +25,6 @@ TrieNode* get_doc_Node(void){
  
 TrieNode* doc_insert(TrieNode *root, char *key){
     int depth, len = strlen(key), index;
-
-    // root -> frequency ++;
  
     TrieNode *iter = root;
  
