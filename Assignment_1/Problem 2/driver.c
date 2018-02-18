@@ -39,6 +39,13 @@ int main(){
         }
         
         clus_root = insert_doc_in_clus(clus_root, doc_root, file_list[i]);
+
+        // if(i == file_count - 1){
+        //     FILE* fptr = fopen("serialize_test.txt", "w+");
+        //     serialize_trie(doc_root, fptr, -1);
+        //     fclose(fptr);
+        // }
+
         free(doc_root);
         fclose(fp);
     }
