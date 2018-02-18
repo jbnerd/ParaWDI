@@ -18,9 +18,9 @@ FILE *getStream(FILE *fp, buffer b, int k)
 }
 
 char* getWord(FILE* fp, buffer b, int k){
-    buffer temp = (buffer) malloc(k * sizeof(char));
+    buffer temp = (buffer) malloc(25 * sizeof(char));
     int i = 0;
-    memset(temp, 0, k);
+    memset(temp, 0, 25);
     while(1){
         if (offset == k || strlen(b) == 0 || b[offset] == '\0'){
 			if( eof ){
@@ -65,7 +65,7 @@ char** list_dir(char* folder_name, int* file_count){
         /* print all the files and directories within directory */
         while ((ent = readdir (dir)) != NULL) {
             if (ent->d_type == DT_REG){
-                file_list[i] =  (char*)malloc(strlen(ent->d_name)*sizeof(char));
+                file_list[i] =  (char*) malloc(strlen(ent->d_name)*sizeof(char));
                 strcpy(file_list[i], ent->d_name);
                 // printf ("%s\n", file_list[i]);
                 i++;
@@ -78,6 +78,24 @@ char** list_dir(char* folder_name, int* file_count){
         return NULL;
     }
     return file_list;
+}
+
+
+char** append_paths(char* folder_name, char** file_list, int file_count){
+    int i;
+    char** new_file_list = (char**) malloc(file_count * sizeof(char*));
+
+    for(i = 0; i < file_count; i ++){
+        new_file_list[i] = (char*) malloc( (strlen(folder_name) + strlen(file_list[i]) + 2) * sizeof(char) );
+        strcpy(new_file_list[i], folder_name);
+        strcat(new_file_list[i], "/");
+        strcat(new_file_list[i], file_list[i]);
+
+        // free(file_list[i]);
+        
+    }
+    // free(file_list);
+    return new_file_list;
 }
 
 
@@ -95,10 +113,14 @@ char** list_dir(char* folder_name, int* file_count){
 //     // }
     
 //     int file_count;
-//     char** filelist = list_dir(".", &file_count);
+//     // char** filelist = list_dir(".", &file_count);
+
+//     char** old_file_list = list_dir(".", &file_count);
+//     char** file_list = append_paths(".", old_file_list, file_count);
+
 //     // printf("%d", file_count);
 //     for(i=0; i < file_count; i++){
-//         printf("%s\n", filelist[i]);
+//         printf("%s\n", file_list[i]);
 //     }
 
 // }
