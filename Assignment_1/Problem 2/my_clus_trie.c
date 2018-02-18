@@ -22,7 +22,7 @@ TrieNode* get_clus_Node(void){
     return temp;
 }
  
-TrieNode* clus_insert(TrieNode *root, char *key, int frequency, char* doc_name){
+TrieNode* clus_insert(TrieNode *root, char *key, unsigned int frequency, char* doc_name){
     int depth, len = strlen(key), index;
     //root -> frequency += frequency;
  
