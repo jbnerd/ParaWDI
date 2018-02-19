@@ -157,16 +157,26 @@ List* mergeLists(List* list1, List* list2){
     }
 
     if(iter1 == NULL){
-        ret -> tail -> next = iter2;
-        while(ret -> tail -> next != NULL){
-            ret -> tail = ret -> tail -> next;
+        if(list1 -> size == 0){
+            ret -> head = iter2;
+            ret -> tail = list1 -> tail;
+        }else{
+            ret -> tail -> next = iter2;
+            while(ret -> tail -> next != NULL){
+                ret -> tail = ret -> tail -> next;
+            }
         }
     }
 
     if(iter2 == NULL){
-        ret -> tail -> next = iter1;
-        while(ret -> tail -> next != NULL){
-            ret -> tail = ret -> tail -> next;
+        if(list2 -> size == 0){
+            ret -> head = iter1;
+            ret -> tail = list2 -> tail;
+        }else{
+            ret -> tail -> next = iter1;
+            while(ret -> tail -> next != NULL){
+                ret -> tail = ret -> tail -> next;  
+            }
         }
     }
 
@@ -181,17 +191,33 @@ int main(){
 	Element* data1 = (Element*) malloc(sizeof(Element));
 	Element* data2 = (Element*) malloc(sizeof(Element));
 
-	data -> frequency = 1;
-	data1 -> frequency = 2;
-	data2 -> frequency = 3;
+    Element* data3 = (Element*) malloc(sizeof(Element));
+	Element* data4 = (Element*) malloc(sizeof(Element));
+	Element* data5 = (Element*) malloc(sizeof(Element));
+
+	data -> frequency = 9;
+	data1 -> frequency = 5;
+	data2 -> frequency = 2;
+    data3 -> frequency = 1;
+	data4 -> frequency = 7;
+	data5 -> frequency = 3;   
 
 	List* list = create_list();
-	list = add_to_end(list, data);
-	list = add_to_end(list, data1);
-	list = add_to_end(list, data2);
+	list = insert_in_order(list, data);
+	list = insert_in_order(list, data1);
+	list = insert_in_order(list, data2);
+    list = insert_in_order(list, data3);
+    list = insert_in_order(list, data4);
 	print_list(list);
 
+    List* list2 = create_list();
+	// list2 = insert_in_order(list2, data3);
+	// list2 = insert_in_order(list2, data4);
+	// list2 = insert_in_order(list2, data5);
+	print_list(list2);
 
+    List* l3 = mergeLists(list, list2); 
+    print_list(l3);
 	return 0;
 }
 */
