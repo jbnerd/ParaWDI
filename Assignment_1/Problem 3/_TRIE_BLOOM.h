@@ -5,4 +5,4 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-unsigned long* traverse( TrieNode *cnode , unsigned long* vec, char *key);
+unsigned long* traverse( TrieNode *cnode , unsigned long* vec, char *key, int depth);

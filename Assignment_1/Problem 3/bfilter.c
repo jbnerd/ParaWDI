@@ -50,18 +50,18 @@ uint32_t murmurhash (const char *key, uint32_t len, uint32_t seed) {
     h ^= (h >> 13);
     h *= 0xc2b2ae35;
     h ^= (h >> 16);
-    return h;
+    return h % DOMAIN;
 }
 
 unsigned long* getVector()
 {
-    return (unsigned long*) calloc( SIZE, sizeof(unsigned long));
+    return (unsigned long*) calloc( FILTER_SIZE, sizeof(unsigned long));
 }
 
 unsigned long* addB(char *key, unsigned long* vector)
 {  int i = 0;
    uint32_t h,d,k,m;
-   int a[] = {896,991,566,169,459,251,546,41};
+   int a[] = {893,991,567,169,459,251,546,41};
    uint32_t len = (uint32_t) strlen(key);
    for(i = 0; i< NUM_HASHES; i++)
    {
@@ -80,7 +80,7 @@ unsigned long* addB(char *key, unsigned long* vector)
 bool searchB(char *key, unsigned long* vector)
 {  int i = 0;
    uint32_t h,d,k,m;
-   int a[] = {896,991,566,169,459,251,546,41};
+   int a[] = {893,991,567,169,459,251,546,41};
    uint32_t len = (uint32_t) strlen(key);
    for(i = 0; i< NUM_HASHES; i++)
    {
