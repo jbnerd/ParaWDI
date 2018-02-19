@@ -110,27 +110,36 @@ int main(int argc, char *argv[]) {
       }
     }
 
+    char *arr = (char*)calloc(ARRAY_SIZE((n_hi - n_lo)),sizeof(char));
 
-    char x[ARRAY_SIZE(SIZE)] = (char*)malloc()
-    char *arr = (char *)calloc((n_hi - n_lo)/2, sizeof(char));
-
-    page = 4096;//1024*64;
+    count = 0;
+    page = 4096*4;//1024*64;
     page_low = 0;
     page_low+=page;
-    page_hi = min((n_hi-n_lo),(page_hi+page);
+    page_hi = min((n_hi-n_lo),(page);
 
     while(page_low<(n_hi-n_lo){
       for(j = 0; j < root_count; j++ )
-        { for(i = prime*prime; i< page_limit; i+=dprime )
-            {
-    
+        {   prime = rootList[j];
+            start = min((prime*prime),(page_low + (prime - page_low % prime )))
+            if(start%2 == 0)
+                start+=prime;
+            dprime = 2*prime;
+            for(i = start; i< page_hi; i+=dprime )
+            {  if(get_bit(arr,i)==0) 
+               toggle_bit( arr, i)
             }
           }
+      for(j=page_low,j<page_hi,j++)
+      {    
+        if(get_bit(arr,j)==0)
+            count+=1;
+      }    
       page_low+=page;
       page_hi = min((n_hi-n_lo),(page_hi+page);
     }
 
-
+/*
     for (i = 2 * prime; i <= lsqrt; i += prime)
         sarr[i] = 1;
 
@@ -160,7 +169,7 @@ int main(int argc, char *argv[]) {
         count += 1 - arr[i];
     }
     // ierr = MPI_Reduce ( &count, &total_count, 1, MPI_LONG, MPI_SUM, root ,
-    // MPI_COMM_WORLD );
+    // MPI_COMM_WORLD );*/
 
     int *rcounts, *dsply;
     if (id == root) {
@@ -186,7 +195,7 @@ int main(int argc, char *argv[]) {
 
     long *primes = (long *)malloc(count * sizeof(long));
     for (i = 0; i < n_hi - n_lo;; i++) {
-      if (arr[i] != 1) {
+      if (get_bit(arr,i) == 1) {
         primes[k] = i + n_lo;
         k++;
       }
@@ -198,11 +207,10 @@ int main(int argc, char *argv[]) {
 
     MPI_Gatherv(primes, count, MPI_LONG, all_primes, rcounts, dsply, MPI_LONG,
                 root, MPI_COMM_WORLD);
-    // Uncomment the following code to print all the primes.
     if(MODE == 1 ){
-      for (i = 0; i < total_count; i++) {
-          // printf("%d\n", all_primes[i]);    
-  }
+      for (i = 0; i < total_count; i++) 
+           printf("%d\n", all_primes[i]);    
+  
     }
     if (id == root) {
       wtime = MPI_Wtime() - wtime;
@@ -210,12 +218,6 @@ int main(int argc, char *argv[]) {
       printf("  %10ld %10ld  %16f\n", limit, total_count, wtime);
     }
     //  free(arr);
-
-
-
-
-
-
 
   } else {
     if (id == 0) {
