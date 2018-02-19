@@ -1,11 +1,9 @@
-// Solution by Arka Talukdar
-
 # include <stdio.h>
 # include <time.h>
 # include <math.h>
 # include <mpi.h>
 # include <stdlib.h>
-#define UPPER_BOUND  1999999999
+#define UPPER_BOUND  300
 #define MODE 1  //0 to force entire task in one process
 
 int main ( int argc, char *argv[] );
@@ -32,6 +30,8 @@ int main ( int argc, char *argv[] )
   long n_hi, n_lo = 1, limit;
   long prime, start, count = 0, total_count;
   double wtime;
+
+  //setting limit
   char** end;
   //setting limit
   if (argc > 0 && MODE == 1)
@@ -72,34 +72,36 @@ int main ( int argc, char *argv[] )
   else
         n_lo = (long)(limit/p) *id;    
   char *arr = (char*) calloc((n_hi - n_lo) , sizeof(char));
-  //char *sarr = (char*) calloc((lsqrt+1) , sizeof(char));
 
   //find next prime
   ptr = n_lo;
-  prime = 2;
-
-  while(prime <= lsqrt && prime > 1 )
+  prime = 3;
+  while(prime <= n_hi && prime > 1 )
   {  //get next prime  
-    while( prime <= lsqrt && sarr[prime] == 1)
-        prime+=1;
-    if(prime > lsqrt)
-      break;
-    //if(id == root)
-      //      printf(" %d /n", prime);
+     if(id == root)
+     {   while(arr[ptr-n_lo] == 1)
+          {  ptr+=1;    
+             if(ptr > lsqrt)  // can comment out maybe
+             {  ptr = limit+1;
+                break;
+              }
+           }    
+        prime  = ptr;  
+        ptr += 1;           
+      }
+      
     //broadcast prime
     //int er_a = prime;
-    //ierr = MPI_Bcast( &prime, 1, MPI_INT, root, MPI_COMM_WORLD );
-    //if(prime >= n_hi )
-    //    break;
-    for(i = 2*prime; i<= lsqrt; i+=prime)
-      sarr[i] = 1;
+    ierr = MPI_Bcast( &prime, 1, MPI_INT, root, MPI_COMM_WORLD );
+    if(prime >= n_hi )
+        break;
+        
     //eliminate multiples of prime in n_lo to n_hi
     start = (long) ceil((n_lo*1.0)/prime) *  prime ;
     if(id == root)
         start += prime;
     for(i = start - n_lo ;i<n_hi - n_lo ; i += prime )
         arr[i] = 1;  
-    prime +=1;
   }
 
   // count primes
@@ -111,56 +113,11 @@ int main ( int argc, char *argv[] )
   { for(i = 0;i<limit-n_lo;i+=1)
     count+= 1 - arr[i];
   }
-  ierr = MPI_Reduce ( &count, &total_count, 1, MPI_LONG, MPI_SUM, root , MPI_COMM_WORLD );
-
-
-  int *rcounts, *dsply;
-  if (id == root){
-      rcounts = (int*) malloc(p * sizeof(int));
-      dsply = (int*) malloc(p * sizeof(int));
-  }
-
-  MPI_Gather(&count, 1, MPI_INT, rcounts, 1, MPI_INT, root, MPI_COMM_WORLD);
-
-  /*
-
-  long subdomain_size;
-  if(id != p-1)
-    subdomain_size = limit - n_lo;
-  else
-    subdomain_size = n_hi - n_lo;
-
-  int *primes = (int*) malloc(count * sizeof(int));
-    int k = 0;
-    for(i = 0; i < subdomain_size; i ++){
-        if(arr[i] != 1){
-            primes[k] = i + n_lo;
-            k++;
-        }
-    }
-
-    if(id == root){
-        for(i=0; i < p; i++){
-            dsply[i] = total_count;            
-            total_count += rcounts[i];
-        }
-    }
-
-    int* all_primes;
-    if (id == root)
-        all_primes = (int*) malloc(total_count * sizeof(int));
-    
-    MPI_Gatherv(primes, count, MPI_INT, all_primes, rcounts, dsply, MPI_INT, root, MPI_COMM_WORLD);
-    // Uncomment the following code to print all the primes. 
-    
-    // for(i = 0; i < total_count; i++){
-    //     printf("%d\n", all_primes[i]);
-    // }
-*/
+  ierr = MPI_Reduce ( &count, &total_count, 1, MPI_INT, MPI_SUM, root , MPI_COMM_WORLD );
   if ( id == root )
     { wtime = MPI_Wtime( ) - wtime;
       printf ( "         N        Pi          Time\n" );
-      printf ("  %10ld %10ld  %16f\n", limit, total_count, wtime );
+      printf ("  %8d  %8d  %14f\n", limit, total_count, wtime );
     }
 //	free(arr);
  }
@@ -189,7 +146,7 @@ int main ( int argc, char *argv[] )
            count+=arr[i];
         wtime = MPI_Wtime( ) - wtime;
         printf ( "         N        Pi          Time\n" );
-        printf ("  %10ld %10ld  %16f\n", limit, total_count, wtime );
+        printf ("  %8d  %8d  %14f\n", limit, total_count, wtime );
 //	free(arr);
     }
   }
