@@ -18,9 +18,9 @@ FILE *getStream(FILE *fp, buffer b, int k)
 }
 
 char* getWord(FILE* fp, buffer b, int k){
-    buffer temp = (buffer) malloc(25 * sizeof(char));
+    buffer temp = (buffer) malloc(35 * sizeof(char));
     int i = 0;
-    memset(temp, 0, 25);
+    memset(temp, 0, 35);
     while(1){
         if (offset == k || strlen(b) == 0 || b[offset] == '\0'){
 			if( eof ){
