@@ -16,4 +16,6 @@ char* getWord(FILE* fp, buffer b, int k);
 
 char** list_dir(char* folder_name, int* file_count);
 
+char** append_paths(char* folder_name, char** file_list, int file_count);
+
 #endif

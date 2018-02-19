@@ -6,7 +6,7 @@
 #define _MY_LINKED_LIST
 
 struct Element{
-	int frequency;
+	unsigned int frequency;
 	char* doc_name;
 };
 typedef struct Element Element;

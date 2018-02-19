@@ -19,7 +19,7 @@ TrieNode* get_doc_Node(void){
         for (i = 0; i < ALPHABET_SIZE; i++){
             temp -> children[i] = NULL;
         }
-    } 
+    }
     return temp;
 }
  
