@@ -32,7 +32,6 @@ TrieNode* dfs(TrieNode *cnode,TrieNode *dnode, char* doc_name )
             cnode -> children[i] = dfs(cnode -> children[i],dnode -> children[i], doc_name );
         }     
     }
-    free(dnode);
     return cnode;
 }
 
