@@ -41,7 +41,7 @@ TrieNode* insert_doc_in_clus(TrieNode *croot,TrieNode *droot, char* doc_name )
 }
 
 
-void cluster_merge(TrieNode *croot1,TrieNode *croot2)
+TrieNode* cluster_merge(TrieNode *croot1,TrieNode *croot2)
 {
     int i = 0;  
     if( croot2 -> end )
@@ -54,9 +54,10 @@ void cluster_merge(TrieNode *croot1,TrieNode *croot2)
         {
             if (!croot1 -> children[i])
                 croot1 -> children[i] = get_clus_Node();
-            cluster_merge( croot1 -> children[i],croot2 -> children[i] );
+            croot1 -> children[i] = cluster_merge( croot1 -> children[i],croot2 -> children[i] );
         }     
     }
+    return croot1;
 }
 
 
