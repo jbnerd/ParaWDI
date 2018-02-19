@@ -41,4 +41,4 @@ driver.o : driver.c _LINKED_LIST.h _TOKENIZER.h _TRIE.h
 	mpicc -c -g driver.c
 
 clean : 
-	rm *.o exe
+	rm *.o  *.txt exe a.out
