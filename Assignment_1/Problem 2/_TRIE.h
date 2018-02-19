@@ -39,15 +39,15 @@ bool doc_search(struct TrieNode *root, const char *key);
 
 bool clus_search(struct TrieNode *root, const char *key);
 
-void cluster_merge(TrieNode *croot1,TrieNode *croot2);
+TrieNode* cluster_merge(TrieNode *croot1,TrieNode *croot2);
 
 char* convert_to_lower(char* str);
 
 TrieNode * insert_doc_in_clus(TrieNode *croot, TrieNode *droot, char* doc_name );
 
-void serialize_trie(TrieNode* root, FILE** fp1, FILE** fp2, int child_index);
+void serialize_trie(TrieNode* root, char** fp1, char** fp2, int child_index, int* fp1_count, int* fp2_count, int* fp1_size, int* fp2_size);
 
-TrieNode* deserialize_trie(TrieNode* root, FILE** fp1, FILE** fp2);
+TrieNode* deserialize_trie(TrieNode* root, char** fp1, char** fp2, int* fp1_count, int* fp2_count);
 
 char index_to_char(int index);
 
