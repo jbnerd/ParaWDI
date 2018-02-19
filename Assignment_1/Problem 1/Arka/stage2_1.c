@@ -11,6 +11,34 @@
 
 int main(int argc, char *argv[]);
 
+//returns more than o
+
+int get(unsigned long* vector, long pos){
+    int m,d,h;
+    d = pos/64;
+    m = pos%64;
+    k = (1<<m);
+    if (vec[d] & k) 
+        return 1;
+    return 0;
+}
+
+void set(unsigned long* vec, long pos){
+    int m,d,h;
+    d = pos/64;
+    m = pos%64;
+    k = (1<<m);
+    vec[d] = ( vec[d] | k )
+}
+
+int reset(unsigned long* vec, long pos){
+    int m,d,h;
+    d = pos/64;
+    m = pos%64;
+    k = (1<<m);
+    vec[d] = ( vec[d] & (! k) );
+}
+
 void timestamp() {
 #define TIME_SIZE 40
   static char time_buffer[TIME_SIZE];
@@ -69,20 +97,20 @@ int main(int argc, char *argv[]) {
       n_lo = 2;
     else
       n_lo = (long)(limit / p) * id;
-    char *arr = (char *)calloc((n_hi - n_lo), sizeof(char));
-    char *sarr = (char *)calloc((lsqrt + 1), sizeof(char));
+    long *arr = (long *)calloc(ceil((n_hi - n_lo)/64), sizeof(long));
+    long *sarr = (long *)calloc(ceil((lsqrt + 1)/64), sizeof(long));
 
     ptr = n_lo;
     prime = 2;
 
     while (prime <= lsqrt && prime > 1) { // get next prime
-      while (prime <= lsqrt && sarr[prime] == 1)
+      while (prime <= lsqrt && get( sarr,prime ) == 1 )
         prime += 1;
       if (prime > lsqrt)
         break;
 
       for (i = 2 * prime; i <= lsqrt; i += prime)
-        sarr[i] = 1;
+        set(sarr,i);
 
       // eliminate multiples of prime in n_lo to n_hi
       start = (long)ceil((n_lo * 1.0) / prime) * prime;
@@ -92,14 +120,14 @@ int main(int argc, char *argv[]) {
       dprime = 2 * prime;
       if (prime == 2) {
         for (i = start - n_lo; i < n_hi - n_lo; i += prime)
-          arr[i] = 1;
+          set(sarr,i);
       } else if (start % 2 == 0) {
         start += prime;
         for (i = start - n_lo; i < n_hi - n_lo; i += dprime)
-          arr[i] = 1;
+          set(sarr,i);
       } else {
         for (i = start - n_lo; i < n_hi - n_lo; i += dprime)
-          arr[i] = 1;
+          set(sarr,i);
       }
       prime += 1;
     }
@@ -107,10 +135,10 @@ int main(int argc, char *argv[]) {
     // count primes
     if (id != p - 1) {
       for (i = 0; i < n_hi - n_lo; i += 1)
-        count += 1 - arr[i];
+        count += 1 - get(arr,i);
     } else {
       for (i = 0; i < limit - n_lo; i += 1)
-        count += 1 - arr[i];
+        count += 1 - get(arr,i);
     }
     // ierr = MPI_Reduce ( &count, &total_count, 1, MPI_LONG, MPI_SUM, root ,
     // MPI_COMM_WORLD );
@@ -140,7 +168,7 @@ int main(int argc, char *argv[]) {
 
     long *primes = (long *)malloc(count * sizeof(long));
     for (i = 0; i < subdomain_size; i++) {
-      if (arr[i] != 1) {
+      if (get(arr,i) == 0) {
         primes[k] = i + n_lo;
         k++;
       }
