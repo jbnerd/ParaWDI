@@ -82,27 +82,42 @@ int main(){
     char output[][32] = {"Not present in trie", "Present in trie"};
     char keys[][4] = {"a", "any", "by", "bye"};
 
-//     TrieNode *root = get_clus_Node();
-//     int i;
-//     for (i = 0; i < ARRAY_SIZE(keys); i++){
-//         clus_insert(root, keys[i], i, "lol");
-//     }
+    TrieNode *root = get_clus_Node();
+    int i;
+    for (i = 0; i < ARRAY_SIZE(keys); i++){
+        clus_insert(root, keys[i], i, "lol");
+    }
 
-    FILE* fptr1 = fopen("serial_trie.txt", "w+");
-    FILE* fptr2 = fopen("serial_lists.txt", "w+");
-    serialize_trie(root, &fptr1, &fptr2, -1);
-    fclose(fptr1);
-    fclose(fptr2);
+    int size1 = 100, size2 = 100;
+    char* str1 = (char*) malloc(size1 * sizeof(char));
+    char* str2 = (char*) malloc(size2 * sizeof(char));
+    int iter1 = 0, iter2 = 0;
+    serialize_trie(root, &str1, &str2, -1, &iter1, &iter2, &size1, &size2);
 
-    fptr1 = fopen("serial_trie.txt", "r");
-    fptr2 = fopen("serial_lists.txt", "r");
-    // FILE* fptr_temp = fopen("test.txt", "w+");
+    printf("%s\n", str1);
+    printf("%s\n", str2);
+
     TrieNode* de_root;
-    de_root = deserialize_trie(de_root, &fptr1, &fptr2);
-    // serialize_trie(de_root, fptr_temp, -1);
-    fclose(fptr1);
-    fclose(fptr2);
-    // fclose(fptr_temp);
+    iter1 = 0;
+    iter2 = 0;
+    de_root = deserialize_trie(de_root, &str1, &str2, &iter1, &iter2);
+
+
+    // FILE* fptr1 = fopen("serial_trie.txt", "w+");
+    // FILE* fptr2 = fopen("serial_lists.txt", "w+");
+    // serialize_trie(root, &fptr1, &fptr2, -1);
+    // fclose(fptr1);
+    // fclose(fptr2);
+
+    // fptr1 = fopen("serial_trie.txt", "r");
+    // fptr2 = fopen("serial_lists.txt", "r");
+    // // FILE* fptr_temp = fopen("test.txt", "w+");
+    // TrieNode* de_root;
+    // de_root = deserialize_trie(de_root, &fptr1, &fptr2);
+    // // serialize_trie(de_root, fptr_temp, -1);
+    // fclose(fptr1);
+    // fclose(fptr2);
+    // // fclose(fptr_temp);    
 
     printf("%d\n\n", clus_search(de_root, "answer"));
     printf("%d\n", clus_search(de_root, "a"));

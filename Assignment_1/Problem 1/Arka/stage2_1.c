@@ -1,9 +1,11 @@
+// Solution by Arka Talukdar
+
 #include <stdio.h>
 #include <time.h>
 #include <math.h>
 #include <mpi.h>
 #include <stdlib.h>
-#define UPPER_BOUND 100
+#define UPPER_BOUND 9
 #define MODE 0  // 0 to forsake CL-ARG
 #define PRINT 0 // 1 to print primes.
 
@@ -11,8 +13,8 @@ int main(int argc, char *argv[]);
 
 //returns more than o
 
-int get(unsigned long* vec, long pos){
-    int m,d,h,k;
+int get(unsigned long* vector, long pos){
+    int m,d,h;
     d = pos/64;
     m = pos%64;
     k = (1<<m);
@@ -22,15 +24,15 @@ int get(unsigned long* vec, long pos){
 }
 
 void set(unsigned long* vec, long pos){
-    int m,d,h,k;
+    int m,d,h;
     d = pos/64;
     m = pos%64;
     k = (1<<m);
-    vec[d] = ( vec[d] | k );
+    vec[d] = ( vec[d] | k )
 }
 
-void reset(unsigned long* vec, long pos){
-    int m,d,h,k;
+int reset(unsigned long* vec, long pos){
+    int m,d,h;
     d = pos/64;
     m = pos%64;
     k = (1<<m);
@@ -62,7 +64,7 @@ int main(int argc, char *argv[]) {
   if (argc > 0 && MODE == 1)
     limit = (long)pow(10,atoi(argv[1]));
   else
-    limit = UPPER_BOUND; /*setting upper bound */
+    limit = (long)pow(10,UPPER_BOUND); /*setting upper bound */
   long lsqrt = (long)ceil(sqrt(limit));
 
   /*  Initialize MPI. */
@@ -95,8 +97,9 @@ int main(int argc, char *argv[]) {
       n_lo = 2;
     else
       n_lo = (long)(limit / p) * id;
-    long *arr = (long *)calloc(ceil((n_hi - n_lo)/64), sizeof(long));
-    long *sarr = (long *)calloc(ceil((lsqrt + 1)/64), sizeof(long));
+
+    char *arr = (char *)calloc((n_hi - n_lo), sizeof(char));
+    char *sarr = (char *)calloc((lsqrt + 1), sizeof(char));
 
     ptr = n_lo;
     prime = 2;
@@ -111,14 +114,14 @@ int main(int argc, char *argv[]) {
         set(sarr,i);
 
       // eliminate multiples of prime in n_lo to n_hi
-      start = (long)ceil((n_lo * 1.0) / prime) * prime;
-      if (id == root)
-        start += prime;
-
+      start = prime * prime;
+      //printf("%ld \n", start);
       dprime = 2 * prime;
       if (prime == 2) {
-        for (i = start - n_lo; i < n_hi - n_lo; i += prime)
-          set(sarr,i);
+        for (i = start - n_lo; i < n_hi - n_lo; i += prime){
+          arr[i] = 1; 
+        }
+
       } else if (start % 2 == 0) {
         start += prime;
         for (i = start - n_lo; i < n_hi - n_lo; i += dprime)
@@ -129,7 +132,7 @@ int main(int argc, char *argv[]) {
       }
       prime += 1;
     }
-
+printf("hello\n");
     // count primes
     if (id != p - 1) {
       for (i = 0; i < n_hi - n_lo; i += 1)
