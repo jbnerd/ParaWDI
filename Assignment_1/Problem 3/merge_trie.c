@@ -5,11 +5,11 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-void plug(TrieNode *cnode, char* doc_name, int frequency)
+void plug(TrieNode *cnode, char* doc_name, unsigned int frequency)
 {
     Element* temp = (Element*) malloc(sizeof(Element));
     temp -> doc_name = (char*) malloc((strlen(doc_name) + 1) * sizeof(char));
-    temp -> frequency += frequency;
+    temp -> frequency = frequency;
     strcpy(temp -> doc_name, doc_name);
     cnode -> list = insert_in_order(cnode -> list, temp);
     cnode -> end = true;
@@ -41,7 +41,7 @@ TrieNode* insert_doc_in_clus(TrieNode *croot,TrieNode *droot, char* doc_name )
 }
 
 
-void cluster_merge(TrieNode *croot1,TrieNode *croot2)
+TrieNode* cluster_merge(TrieNode *croot1,TrieNode *croot2)
 {
     int i = 0;  
     if( croot2 -> end )
@@ -54,7 +54,19 @@ void cluster_merge(TrieNode *croot1,TrieNode *croot2)
         {
             if (!croot1 -> children[i])
                 croot1 -> children[i] = get_clus_Node();
-            cluster_merge( croot1 -> children[i],croot2 -> children[i] );
+            croot1 -> children[i] = cluster_merge( croot1 -> children[i],croot2 -> children[i] );
         }     
     }
+    return croot1;
+}
+
+
+int doc_free(TrieNode* dnode){
+    int i,k=1;
+    for(i=0; i< ALPHABET_SIZE; i++){
+        if(dnode -> children[i])
+            k+=doc_free( dnode -> children[i]);
+    }
+    free(dnode);
+    return k;
 }

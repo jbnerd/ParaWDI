@@ -6,7 +6,7 @@
 #define _MY_LINKED_LIST
 
 struct Element{
-	int frequency;
+	unsigned int frequency;
 	char* doc_name;
 };
 typedef struct Element Element;
@@ -32,6 +32,8 @@ bool is_empty(List* list);
 
 List* insert_in_order(List* list, Element* data);
 
+List* add_to_end(List* list, Element* data);
+
 List* mergeLists(List* list1, List* list2);
 
 List* delete_from_end(List* list);
@@ -39,5 +41,9 @@ List* delete_from_end(List* list);
 void print_list(List* list);
 
 List* delete_from_front(List* list);
+
+void serialize_list(List* list, char** fp, int* fp_count, int* fp_size);
+
+List* deserialize_list(char** fp, int* fp_count);
 
 #endif

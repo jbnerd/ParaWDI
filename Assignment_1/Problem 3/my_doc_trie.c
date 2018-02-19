@@ -10,6 +10,7 @@
 
 TrieNode* get_doc_Node(void){
     TrieNode *temp = (TrieNode*) malloc(sizeof(TrieNode));
+    temp -> children = (TrieNode**) malloc(ALPHABET_SIZE * sizeof(TrieNode*));
  
     if (temp){
         int i;
@@ -18,14 +19,12 @@ TrieNode* get_doc_Node(void){
         for (i = 0; i < ALPHABET_SIZE; i++){
             temp -> children[i] = NULL;
         }
-    } 
+    }
     return temp;
 }
  
 TrieNode* doc_insert(TrieNode *root, char *key){
     int depth, len = strlen(key), index;
-
-    // root -> frequency ++;
  
     TrieNode *iter = root;
  
