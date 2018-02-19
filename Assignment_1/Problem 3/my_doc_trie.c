@@ -56,8 +56,18 @@ bool doc_search(struct TrieNode *root, const char *key){
     printf("%d\n", iter->frequency);
     return (iter != NULL && iter -> end);
 }
+/*
+void doc_free(struct TrieNode *dnode ){
 
+    for( i = 0; i < ALPHABET_SIZE; i++ )
+    {   if( cnode -> children[i] ) 
+            doc_free( dnode -> children[i] );
+        }
+    }
+    free(dnode);
+}
 
+*/
 // int main(){
 //     // Input keys (use only 'a' through 'z' and lower case)
 //     char keys[][8] = {"the", "a", "there", "answer", "any", "by", "bye", "their","the", "a", "there","the", "a", };

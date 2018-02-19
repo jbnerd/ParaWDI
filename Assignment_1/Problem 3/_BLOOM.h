@@ -12,5 +12,5 @@
 
 
 unsigned long* getVector();
-unsigned long* add(char *key, unsigned long* vector);
-bool search(char *key, unsigned long* vector);
+unsigned long* addB(char *key, unsigned long* vector);
+bool searchB(char *key, unsigned long* vector);

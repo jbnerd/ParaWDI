@@ -1,4 +1,4 @@
-#include "bfilter.h"
+#include "_BLOOM.h"
 
 uint32_t murmurhash (const char *key, uint32_t len, uint32_t seed) {
   uint32_t c1 = 0xcc9e2d51;
@@ -55,7 +55,7 @@ unsigned long* getVector()
 {   return (unsigned long*) calloc( SIZE, sizeof(unsigned long));
 }
 
-unsigned long* add(char *key, unsigned long* vector)
+unsigned long* addB(char *key, unsigned long* vector)
 {  int i = 0;
    uint32_t h,d,k,m;
    int a[] = {896,991,566,169,459,251,546,41};
@@ -74,7 +74,7 @@ unsigned long* add(char *key, unsigned long* vector)
    return vector;
 }
 
-bool search(char *key, unsigned long* vector)
+bool searchB(char *key, unsigned long* vector)
 {  int i = 0;
    uint32_t h,d,k,m;
    int a[] = {896,991,566,169,459,251,546,41};
