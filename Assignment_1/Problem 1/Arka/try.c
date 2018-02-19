@@ -8,8 +8,25 @@
 #define UPPER_BOUND 9
 #define MODE 0  // 0 to forsake CL-ARG
 #define PRINT 0 // 1 to print primes.
+#ifndef max
+  #define max( a, b ) ( ((a) > (b)) ? (a) : (b) )
+#endif
+#ifnef min
+  #define min( a, b ) ( ((a) < (b)) ? (a) : (b) )
+#endif
 
+#define SIZE (58) /* amount of bits */
+#define ARRAY_SIZE(x) (x/8+(!!(x%8)))
 int main(int argc, char *argv[]);
+char get_bit(char *array, int index);
+void toggle_bit(char *array, int index);
+void toggle_bit(char *array, int index) {
+    array[index / 8] ^= 1 << (index % 8);
+}
+ 
+char get_bit(char *array, int index) {
+    return 1 & (array[index / 8] >> (index % 8));
+}
 
 void timestamp() {
 #define TIME_SIZE 40
@@ -26,7 +43,7 @@ void timestamp() {
 
 int main(int argc, char *argv[]) {
   int id, p, root = 0;
-  long n, i, dprime;
+  long n, i,j, dprime;
   long ptr;
   long n_hi, n_lo = 1, limit;
   long prime, start, count = 0, total_count = 0;
@@ -70,19 +87,51 @@ int main(int argc, char *argv[]) {
     else
       n_lo = (long)(limit / p) * id;
 
-    char *arr = (char *)calloc((n_hi - n_lo), sizeof(char));
+    //char *arr = (char *)calloc((n_hi - n_lo), sizeof(char));
     char *sarr = (char *)calloc((lsqrt + 1), sizeof(char));
 
+    long root_count = 0;
     ptr = n_lo;
     prime = 2;
 
-    while (prime <= lsqrt && prime > 1) { // get next prime
+    while (prime <= lsqrt ) { // get next prime
       while (prime <= lsqrt && sarr[prime] == 1)
         prime += 1;
-      if (prime > lsqrt)
-        break;
+        root_count+=1;
+      for (i = prime * prime; i <= lsqrt; i += prime)
+        sarr[i] = 1;
+      }
+    root_count = 0;
+    long rootList = (long*)calloc(root_count,sizeof(long)) 
+    for(i =2; i<lsqrt; i++)
+    { if(sarr[i] == 1){
+      rootList[root_count] = i;
+      root_count+=1;
+      }
+    }
 
-      for (i = 2 * prime; i <= lsqrt; i += prime)
+
+    char x[ARRAY_SIZE(SIZE)] = (char*)malloc()
+    char *arr = (char *)calloc((n_hi - n_lo)/2, sizeof(char));
+
+    page = 4096;//1024*64;
+    page_low = 0;
+    page_low+=page;
+    page_hi = min((n_hi-n_lo),(page_hi+page);
+
+    while(page_low<(n_hi-n_lo){
+      for(j = 0; j < root_count; j++ )
+        { for(i = prime*prime; i< page_limit; i+=dprime )
+            {
+    
+            }
+          }
+      page_low+=page;
+      page_hi = min((n_hi-n_lo),(page_hi+page);
+    }
+
+
+    for (i = 2 * prime; i <= lsqrt; i += prime)
         sarr[i] = 1;
 
       // eliminate multiples of prime in n_lo to n_hi
@@ -101,10 +150,8 @@ int main(int argc, char *argv[]) {
         for (i = start - n_lo; i < n_hi - n_lo; i += dprime)
           arr[i] = 1;
       }
-      prime += 1;
     }
-printf("hello\n");
-    // count primes
+    // count primes, just supply 
     if (id != p - 1) {
       for (i = 0; i < n_hi - n_lo; i += 1)
         count += 1 - arr[i];
@@ -131,15 +178,14 @@ printf("hello\n");
       }
     }
 
+    // tota
+
+
+
     long k = 0;
-    long subdomain_size;
-    if (id == p - 1)
-      subdomain_size = limit - n_lo;
-    else
-      subdomain_size = n_hi - n_lo;
 
     long *primes = (long *)malloc(count * sizeof(long));
-    for (i = 0; i < subdomain_size; i++) {
+    for (i = 0; i < n_hi - n_lo;; i++) {
       if (arr[i] != 1) {
         primes[k] = i + n_lo;
         k++;
@@ -154,9 +200,9 @@ printf("hello\n");
                 root, MPI_COMM_WORLD);
     // Uncomment the following code to print all the primes.
     if(MODE == 1 ){
-    	for (i = 0; i < total_count; i++) {
-      		// printf("%d\n", all_primes[i]);    
-	}
+      for (i = 0; i < total_count; i++) {
+          // printf("%d\n", all_primes[i]);    
+  }
     }
     if (id == root) {
       wtime = MPI_Wtime() - wtime;
@@ -164,6 +210,13 @@ printf("hello\n");
       printf("  %10ld %10ld  %16f\n", limit, total_count, wtime);
     }
     //  free(arr);
+
+
+
+
+
+
+
   } else {
     if (id == 0) {
       timestamp();
