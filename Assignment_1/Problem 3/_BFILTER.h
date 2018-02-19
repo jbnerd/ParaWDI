@@ -4,6 +4,9 @@
 #include <stdbool.h>
 #include <string.h>
 
+#ifndef _BLOOM
+#define _BLOOM
+
 // only multiples of 64
 #define FILTER_SIZE 16
 #define NUM_HASHES 8
@@ -12,5 +15,9 @@
 
 
 unsigned long* getVector();
-unsigned long* addB(char *key, unsigned long* vector);
-bool searchB(char *key, unsigned long* vector);
+
+unsigned long* add(char *key, unsigned long* vector);
+
+bool search(char *key, unsigned long* vector);
+
+#endif

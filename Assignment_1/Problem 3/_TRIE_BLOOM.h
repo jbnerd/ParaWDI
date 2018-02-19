@@ -1,4 +1,4 @@
-#include "bfilter.h"
+#include "_BFILTER.h"
 #include "_TRIE.h"
 #include <string.h>
 #include <stdio.h>

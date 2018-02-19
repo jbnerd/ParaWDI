@@ -1,6 +1,6 @@
 #include "_TRIE_BLOOM.h"
 
-unsigned long* traverse(TrieNode *cnode, unsigned long* vec, char *key, depth)
+unsigned long* traverse(TrieNode *cnode, unsigned long* vec, char *key, int depth)
 {
     int i = 0, d = depth + 1;
     if( cnode -> end)
@@ -17,7 +17,7 @@ unsigned long* traverse(TrieNode *cnode, unsigned long* vec, char *key, depth)
 
 unsigned long* clusToBloom(TrieNode *root){
     int depth = 0;
-    char unsigned long* vec = getVector();
+    unsigned long* vec = getVector();
     char* key = (char*) malloc( 26 * sizeof(char));
     memset(key, 0, 25);
     return traverse(root, vec, key, depth);
