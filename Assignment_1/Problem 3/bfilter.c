@@ -59,41 +59,43 @@ unsigned long* getVector()
 }
 
 unsigned long* addB(char *key, unsigned long* vector)
-{  int i = 0;
-   uint32_t h,d,k,m;
-   int a[] = {893,991,567,169,459,251,546,41};
-   uint32_t len = (uint32_t) strlen(key);
-   for(i = 0; i< NUM_HASHES; i++)
-   {
-    h = murmurhash(key, (uint32_t) strlen(key), a[i]) % DOMAIN;
-    d = h/64;
-    m = h%64;
-    k = (1<<m);
-      if((vector[d] & k) > 0)
-          continue;
-      else
-         vector[d] = ( vector[d] | k );    
-   }
-   return vector;
+{  
+    int i = 0;
+    uint32_t h,d,k,m;
+    int a[] = {893,991,567,169,459,251,546,41};
+    uint32_t len = (uint32_t) strlen(key);
+    for(i = 0; i< NUM_HASHES; i++)
+    {
+        h = murmurhash(key, (uint32_t) strlen(key), a[i]) % DOMAIN;
+        d = h/64;
+        m = h%64;
+        k = (1<<m);
+        if((vector[d] & k) > 0)
+            continue;
+        else
+            vector[d] = ( vector[d] | k );  
+    }
+    return vector;
 }
 
 bool searchB(char *key, unsigned long* vector)
-{  int i = 0;
-   uint32_t h,d,k,m;
-   int a[] = {893,991,567,169,459,251,546,41};
-   uint32_t len = (uint32_t) strlen(key);
-   for(i = 0; i< NUM_HASHES; i++)
-   {
-    h = murmurhash(key, (uint32_t) strlen(key), a[i]) % DOMAIN;
-    d = h/64;
-    m = h%64;
-    k = (1<<m);
-    if((vector[d] & k) > 0)
-       continue;
-    else
-       return false;    
-   }
-   return true;
+{  
+    int i = 0;
+    uint32_t h,d,k,m;
+    int a[] = {893,991,567,169,459,251,546,41};
+    uint32_t len = (uint32_t) strlen(key);
+    for(i = 0; i< NUM_HASHES; i++)
+    {
+        h = murmurhash(key, (uint32_t) strlen(key), a[i]) % DOMAIN;
+        d = h/64;
+        m = h%64;
+        k = (1<<m);
+        if((vector[d] & k) > 0)
+            continue;
+        else
+            return false;    
+    }
+    return true;
 }
 /*
 int main()

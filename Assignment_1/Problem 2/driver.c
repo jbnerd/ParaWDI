@@ -36,7 +36,9 @@ int main(){
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
     TrieNode** clus_root;
-    char* folder_name = "/home/shyamal/ST";
+    // char* folder_name = "/home/shyamal/corpora/reuters/training";
+    char* folder_name = "/home/shyamal/corpora/reuters/test";
+    // char* folder_name = "/home/shyamal/ST";
         
     indexing(clus_root, folder_name, world_rank, world_size);
 
@@ -63,6 +65,15 @@ void indexing(TrieNode** clus_root, char* folder_name, int world_rank, int world
 
     *clus_root = get_clus_Node();
 
+    FILE* fptr = fopen("stopwords", "r");
+    if(fptr == NULL){
+        printf("File not opened correctly\n");
+    }
+    int size;
+    char** list_of_words = read_arr(fptr, &size);
+    fclose(fptr);
+
+
     // printf("%d\n", subdomain_start);
     for(i = subdomain_start; i < subdomain_end ; i ++){
         // printf("%d : %s\n", world_rank ,file_list[i]);
@@ -81,6 +92,10 @@ void indexing(TrieNode** clus_root, char* folder_name, int world_rank, int world
         while(1){
             word_buffer = getWord(fp, b, k);
             word_buffer = convert_to_lower(word_buffer);
+            if(search(list_of_words, word_buffer, 0, 570) == 1){
+                free(word_buffer);   
+                continue;  
+            }
             doc_root = doc_insert(doc_root, word_buffer);
             free(word_buffer);
             if( offset >= strlen(b) && eof ) break;                       
@@ -98,7 +113,7 @@ void indexing(TrieNode** clus_root, char* folder_name, int world_rank, int world
     int size1, size2, iter1, iter2;
     char *str1, *str2;
     if(world_rank != 0){
-        size1 = 16000 ; size2 = 16000 ; iter1 = 0 ; iter2 = 0;
+        size1 = 4096 ; size2 = 4096 ; iter1 = 0 ; iter2 = 0;
         str1 = (char*) malloc(size1 * sizeof(char));
         str2 = (char*) malloc(size2 * sizeof(char));
         memset(str1, '\0', size1); memset(str2, '\0', size2);
