@@ -145,7 +145,7 @@ void indexing(TrieNode** clus_root, char* folder_name, int world_rank, int world
 
 
     if(world_rank == 0){
-    //     printf("*************\n");
+    // printf("*************\n");
     // printf("%s\n %s\n", whole_trie, &whole_trie[dsply1[2]]);
     // printf("%s\n %s\n", whole_list, &whole_list[dsply2[2]]);
 
