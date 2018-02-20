@@ -98,7 +98,7 @@ void indexing(TrieNode** clus_root, char* folder_name, int world_rank, int world
     int size1, size2, iter1, iter2;
     char *str1, *str2;
     if(world_rank != 0){
-        size1 = 16000 ; size2 = 16000 ; iter1 = 0 ; iter2 = 0;
+        size1 = 4096 ; size2 = 4096 ; iter1 = 0 ; iter2 = 0;
         str1 = (char*) malloc(size1 * sizeof(char));
         str2 = (char*) malloc(size2 * sizeof(char));
         memset(str1, '\0', size1); memset(str2, '\0', size2);
