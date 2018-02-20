@@ -37,7 +37,7 @@ TrieNode* clus_insert(TrieNode *root, char *key, unsigned int frequency, char* d
 
 bool doc_search(struct TrieNode *root, const char *key);
 
-bool clus_search(struct TrieNode *root, const char *key);
+List* clus_search(struct TrieNode *root, const char *key);
 
 TrieNode* cluster_merge(TrieNode *croot1,TrieNode *croot2);
 
