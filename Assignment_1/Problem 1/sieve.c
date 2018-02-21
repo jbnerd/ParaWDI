@@ -127,7 +127,7 @@ int main(int argc, char *argv[]){
         SetBit(arr,4);       
     }
     SetBit(arr,0);
-    printf("%d\n", rootCount);
+    // printf("%d\n", rootCount);
     // printf("%ld %ld %ld\n" , part_size, n_hi, n_lo);
     
     //for(i =0; i< rootCount; i ++)
@@ -145,30 +145,24 @@ int main(int argc, char *argv[]){
     
     for( i = 0; i < rootCount; i++)
     {   
-        // dprime = 2 * rootPrimes[i];
-        // start  = MAX(   ( n_lo + (rootPrimes[i] - n_lo % rootPrimes[i]))   ,  rootPrimes[i]*rootPrimes[i]  ) -  n_lo;  
-        if(n_lo == 0) start = 2 * rootPrimes[i];
-        else start = (long)ceil( ((double)n_lo) / rootPrimes[i]) * rootPrimes[i] - n_lo;
-        // if( start % 2 == 0 && rootPrimes[i] > 2)
-        //     start += rootPrimes[i];
-        // if(rootPrimes[i] == 2)
-        //     dprime = 2;  
-        if(rootPrimes[i] == 179)
-            printf("%ld start for 179 %d",start,p);
-        //printf("%d   %ld %ld \n" , rootPrimes[i], start,part_size);              
-        for(j = start ; j < part_size; j += rootPrimes[i] )
+        dprime = 2 * rootPrimes[i];
+        if(n_lo == 0) start = ((long)rootPrimes[i])*((long)rootPrimes[i]);
+        else start  = MAX(   ( (long)ceil( ((double)n_lo) / rootPrimes[i]) * rootPrimes[i])   ,  ((long)rootPrimes[i])*((long)rootPrimes[i])  ) -  n_lo;  
+
+        // // else start = (long)ceil( ((double)n_lo) / rootPrimes[i]) * rootPrimes[i] - n_lo;
+        
+        if( start % 2 == 0 && rootPrimes[i] > 2)
+            start += rootPrimes[i];
+        if(rootPrimes[i] == 2)
+            dprime = 2;
+
+        // // if(rootPrimes[i] == 179)
+        // //     printf("%ld start for 179 %d",start,p);
+        //printf("%d   %ld %ld \n" , rootPrimes[i], start,part_size);
+        for(j = start ; j < part_size; j += dprime )
                 SetBit(arr,j);
     }
-    for( i = 0; i < part_size; i++){
-         if(!TestBit(arr,i)){
-            //  /printf("%d\n" , i);
-           count+=1;// can add insertion here
-                //printf(" %ld \n", (i+n_lo));  
-         }
-    } 
 
-   //printf("%d  -----------------------------  \n",(int)ceil((n_hi-n_lo)/32));
-   printf("%ld  -----------------------------  \n",count);
 
     int *rcounts, *dsply;
     long nh, nl;
@@ -190,13 +184,12 @@ int main(int argc, char *argv[]){
         }
     }
 
-        int* all_range;
-        if(id == root){
-            // printf("%ld", tc);
-            all_range = (int*) calloc(tc, sizeof(int));
-        }
-        MPI_Gatherv(arr, (part_size/32), MPI_INT, all_range, rcounts, dsply, MPI_INT, root, MPI_COMM_WORLD);
-        printf("GREAT SUCCESS\n");
+    int* all_range;
+    if(id == root){
+        all_range = (int*) calloc(tc, sizeof(int));
+    }
+    MPI_Gatherv(arr, (part_size/32), MPI_INT, all_range, rcounts, dsply, MPI_INT, root, MPI_COMM_WORLD);
+    // printf("GREAT SUCCESS\n");
 
    long total_count = 0;
     if(id == root){
