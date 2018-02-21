@@ -58,7 +58,7 @@ List* clus_search(struct TrieNode *root, const char *key){
         iter = iter -> children[index];
     }
     // print_list(iter -> list);
-    return iter -> list;
+    return copy_list(iter -> list);
 }
 
 char* convert_to_lower(char* str){
