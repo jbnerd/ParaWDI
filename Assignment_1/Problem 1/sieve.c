@@ -164,36 +164,43 @@ int main(int argc, char *argv[]){
     }
 
 
-    int *rcounts, *dsply;
-    long nh, nl;
-    long tc = 0;    
+    // int *rcounts, *dsply;
+    // long nh, nl;
+    // long tc = 0;    
     
-    if (id == root) {
-        rcounts = (int *)calloc(p, sizeof(int));
-        dsply = (int *)calloc(p, sizeof(int));
-        for(i=0; i < p; i ++){
-            if (i != p - 1)
-                nh = (long)(limit / p) * (i + 1);
-            else
-                nh = limit;
-            nl = (long)(limit / p) * i;
-            dsply[i] = tc;
-            rcounts[i] = (int)ceil((nh - nl)/32);
-            tc += rcounts[i];
-            // printf("helo %d\n", rcounts[i]);
-        }
-    }
+    // if (id == root) {
+    //     rcounts = (int *)calloc(p, sizeof(int));
+    //     dsply = (int *)calloc(p, sizeof(int));
+    //     for(i=0; i < p; i ++){
+    //         if (i != p - 1)
+    //             nh = (long)(limit / p) * (i + 1);
+    //         else
+    //             nh = limit;
+    //         nl = (long)(limit / p) * i;
+    //         dsply[i] = tc;
+    //         rcounts[i] = (int)ceil((nh - nl)/32);
+    //         tc += rcounts[i];
+    //         // printf("helo %d\n", rcounts[i]);
+    //     }
+    // }
 
+    // int* all_range;
+    // if(id == root){
+    //     all_range = (int*) calloc((limit/32), sizeof(int));
+    // }
+    // MPI_Gatherv(arr, (part_size/32), MPI_INT, all_range, rcounts, dsply, MPI_INT, root, MPI_COMM_WORLD);
+    // printf("GREAT SUCCESS\n");
+    
     int* all_range;
     if(id == root){
-        all_range = (int*) calloc(tc, sizeof(int));
+        all_range = (int*) calloc((limit/32), sizeof(int));
     }
-    MPI_Gatherv(arr, (part_size/32), MPI_INT, all_range, rcounts, dsply, MPI_INT, root, MPI_COMM_WORLD);
-    // printf("GREAT SUCCESS\n");
 
-   long total_count = 0;
+    MPI_Gather(arr, (part_size/32), MPI_INT, all_range, (part_size/32), MPI_INT, root, MPI_COMM_WORLD);
+
+   long total_count = 1;
     if(id == root){
-        for(i = 0; i < limit; i++){
+        for(i = 1; i < limit; i += 2){
             if (!TestBit(all_range,i)){
                     total_count += 1;
                     if(PRINT == 1)
