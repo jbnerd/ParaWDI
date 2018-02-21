@@ -23,11 +23,8 @@ void serialize_trie(TrieNode* root, char** fp1, char** fp2, int child_index, int
         *(*fp1 + *fp1_count) = '$';
         (*fp1_count) ++;
         MAY_REALLOC(fp1, fp1_count, fp1_size);
- 		// fprintf(*fp1, "%c ", '$');
  	}else{
  		if(root -> end){
-    		// fprintf(*fp1, "%c ", index_to_char(child_index));
-    		// fprintf(*fp1, "%c ", '(');
             *(*fp1 + *fp1_count) = index_to_char(child_index);
             (*fp1_count) ++;
             MAY_REALLOC(fp1, fp1_count, fp1_size);
@@ -36,7 +33,6 @@ void serialize_trie(TrieNode* root, char** fp1, char** fp2, int child_index, int
             MAY_REALLOC(fp1, fp1_count, fp1_size);
     		serialize_list(root -> list, fp2, fp2_count, fp2_size);
     	}else{
-    		// fprintf(*fp1, "%c ", index_to_char(child_index));
             *(*fp1 + *fp1_count) = index_to_char(child_index);
             (*fp1_count) ++;
             MAY_REALLOC(fp1, fp1_count, fp1_size);
@@ -48,7 +44,6 @@ void serialize_trie(TrieNode* root, char** fp1, char** fp2, int child_index, int
        	serialize_trie(root -> children[i], fp1, fp2, i, fp1_count, fp2_count, fp1_size, fp2_size);
     }
  
-    // fprintf(*fp1, "%c ", '|');
     *(*fp1 + *fp1_count) = '|';
     (*fp1_count) ++;
     MAY_REALLOC(fp1, fp1_count, fp1_size);
@@ -60,16 +55,9 @@ TrieNode* deserialize_trie(TrieNode* root, char** fp1, char** fp2, int* fp1_coun
 	int garbage;
 
     while(1){
-	    // garbage = fscanf(*fp1, "%c ", &val);
         val = *(*fp1 + *fp1_count);
         (*fp1_count) ++;
-    	// printf("%c ", val);
 
-    	// if(feof(*fp1) || garbage == 0){
-    	// 	break;
-    	// }
-
-	    // if(garbage != 0){
 	    if(val == '|'){
 			return root;
 	    }else if(val == '$'){
@@ -86,7 +74,6 @@ TrieNode* deserialize_trie(TrieNode* root, char** fp1, char** fp2, int* fp1_coun
 	    	root -> children[index] = get_clus_Node();
 	    	root -> children[index] = deserialize_trie(root -> children[index], fp1, fp2, fp1_count, fp2_count);
 	    }
-	    // }
 	}
 
 	return root;
@@ -102,12 +89,7 @@ char* itoa(int data){
 void serialize_list(List* list, char** fp, int* fp_count, int* fp_size){
 	Node* temp = list -> head;
 	char* temp_fp = *fp;
-    // printf("%d\n", list  -> size);
-    // char* store = (char*) malloc(100 * sizeof(char));
 	while(temp != NULL){
-		// sprintf(store, "%d\t%s\t", temp -> ele -> frequency, temp -> ele -> doc_name);
-  //       strcat(*fp, store);
-
 		char* buf = itoa(temp -> ele -> frequency);
 		int len = strlen(buf);
 		memcpy(temp_fp + *fp_count, buf, len);
@@ -120,19 +102,13 @@ void serialize_list(List* list, char** fp, int* fp_count, int* fp_size){
 		memcpy(temp_fp + *fp_count, "\t", sizeof(char));
 		*fp_count += 1;
 
-        // while(*(*fp + *fp_count) != '\0'){
-        //     (*fp_count) ++;
-        // }
-		if((*fp_count) >= (*fp_size) - 100){
-			MAY_REALLOC(fp, fp_count, fp_size);
-			temp_fp = *fp;
-		}
+		MAY_REALLOC(fp, fp_count, fp_size);
+		temp_fp = *fp;
+
 		temp = temp -> next;
 	}
-	// sprintf(store, "-1\n");
-    // strcat(*fp, store);
-    memcpy(temp_fp + *fp_count, "-1\n", strlen("-1\n"));
-    *fp_count += strlen("-1\n");
+    memcpy(temp_fp + *fp_count, "-1\n", 3);
+    *fp_count += 3;
 }
 
 List* deserialize_list(char** fp, int* fp_count){
@@ -140,6 +116,7 @@ List* deserialize_list(char** fp, int* fp_count){
 	int garbage, len;
     unsigned int frequency;
 	char* temp_str = (char*) malloc(100 * sizeof(char));
+	memset(temp_str, '\0', 100 * sizeof(char));
 
 	while(1){
 		Element* data = (Element*) malloc(sizeof(Element));
@@ -148,24 +125,19 @@ List* deserialize_list(char** fp, int* fp_count){
 		char* freq_str = itoa(frequency);
 		len = strlen(freq_str);
 		(*fp_count) += len + 1;
-        // while(*(*fp + *fp_count) != '\t' && *(*fp + *fp_count) != '\n'){
-        //     (*fp_count) ++;
-        // }
-        // (*fp_count) ++;
+
 		if(frequency == -1){
 			break;
 		}
 		garbage = sscanf((*fp + *fp_count), "%s", temp_str);
 		len = strlen(temp_str);
 		data -> doc_name = (char*) malloc((len + 1) * sizeof(char));
+		memset(data -> doc_name, '\0', len);
 		(*fp_count) += len + 1;
-        // while(*(*fp + *fp_count) != '\t' && *(*fp + *fp_count) != '\n'){
-        //     (*fp_count) ++;
-        // }
-        // (*fp_count) ++;
 
 		data -> frequency = frequency;
-		strcpy(data -> doc_name, temp_str);
+		memcpy(data -> doc_name, temp_str, (len) * sizeof(char));
+		memset(temp_str, '\0', 100 * sizeof(char));
 
 		list = add_to_end(list, data);
 	}
