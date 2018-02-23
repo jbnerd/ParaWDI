@@ -75,7 +75,7 @@ char index_to_char(int index){
     return index + 'a';
 }
 
-/*
+
 int main(){
     // Input keys (use only 'a' through 'z' and lower case)
     // char keys[][8] = {"the", "a", "there", "answer", "any", "by", "bye", "their"};
@@ -147,4 +147,3 @@ int main(){
  
     return 0;
 }
-*/

@@ -1,7 +1,7 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<dirent.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <dirent.h>
 #include "_TOKENIZER.h"
 
 int offset = 0;
@@ -18,9 +18,9 @@ FILE *getStream(FILE *fp, buffer b, int k)
 }
 
 char* getWord(FILE* fp, buffer b, int k){
-    buffer temp = (buffer) malloc(35 * sizeof(char));
+    buffer temp = (buffer) malloc(140 * sizeof(char));
     int i = 0;
-    memset(temp, 0, 35);
+    memset(temp, 0, 140);
     while(1){
         if (offset == k || strlen(b) == 0 || b[offset] == '\0'){
 			if( eof ){

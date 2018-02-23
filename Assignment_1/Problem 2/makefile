@@ -15,9 +15,10 @@ gdb : exe
 
 gdb2 : exe
 	mpirun -np 2 xterm -e gdb ./exe
-	
+
 compileAll : merge_trie.o my_clus_trie.o my_doc_trie.o my_linked_list.o word_token.o driver.o serializer.o
 	mpicc merge_trie.o my_clus_trie.o my_doc_trie.o my_linked_list.o word_token.o driver.o serializer.o
+
 
 serializer.o : serializer.c _TRIE.h _LINKED_LIST.h
 	mpicc -c -g serializer.c
@@ -39,6 +40,9 @@ word_token.o : word_token.c _TOKENIZER.h
 
 driver.o : driver.c _LINKED_LIST.h _TOKENIZER.h _TRIE.h
 	mpicc -c -g driver.c
+
+stopword_removal.o: stopword_removal.c _TOKENIZER.h
+	mpicc -g -c stopword_removal.c
 
 clean : 
 	rm *.o  *.txt exe a.out

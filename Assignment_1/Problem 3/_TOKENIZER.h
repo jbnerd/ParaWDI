@@ -18,4 +18,8 @@ char** list_dir(char* folder_name, int* file_count);
 
 char** append_paths(char* folder_name, char** file_list, int file_count);
 
+char** read_arr(FILE* fptr, int* size);
+
+bool search(char** arr, char* key, int lo, int hi);
+
 #endif

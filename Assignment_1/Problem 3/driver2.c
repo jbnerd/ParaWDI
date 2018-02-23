@@ -70,7 +70,7 @@ void indexing(TrieNode** clus_root, char* folder_name,  char* query_folder , int
 
     *clus_root = get_clus_Node();
 
-    unsigned long* bloom = getVector();
+    // unsigned long* bloom = getVector();
 
     FILE* fptr = fopen("stopwords", "r");
     int num_stop;
@@ -84,7 +84,7 @@ void indexing(TrieNode** clus_root, char* folder_name,  char* query_folder , int
         FILE* fp = fopen(file_list[i], "r");
         if(!fp){
             perror("");
-            printf("File cannot be opened, please check it");
+            printf("File:: %s cannot be opened, please check it", file_list[i]);
             exit(1);
         }
 
@@ -102,7 +102,7 @@ void indexing(TrieNode** clus_root, char* folder_name,  char* query_folder , int
                 continue;  
             }
             doc_root = doc_insert(doc_root, word_buffer);
-            bloom = addB(word_buffer, bloom);
+            // bloom = addB(word_buffer, bloom);
             free(word_buffer);
             if( offset >= strlen(b) && eof ) break;                       
         }
@@ -112,8 +112,8 @@ void indexing(TrieNode** clus_root, char* folder_name,  char* query_folder , int
         doc_free(doc_root);
     }
 
-    unsigned long* all_blooms = (unsigned long*) malloc(FILTER_SIZE * world_size * sizeof(unsigned long));
-    MPI_Allgather(bloom, FILTER_SIZE, MPI_UNSIGNED_LONG, all_blooms, FILTER_SIZE, MPI_UNSIGNED_LONG, MPI_COMM_WORLD);
+    // unsigned long* all_blooms = (unsigned long*) malloc(FILTER_SIZE * world_size * sizeof(unsigned long));
+    // MPI_Allgather(bloom, FILTER_SIZE, MPI_UNSIGNED_LONG, all_blooms, FILTER_SIZE, MPI_UNSIGNED_LONG, MPI_COMM_WORLD);
 
     int max_deser = 40 * (file_count - ((file_count / world_size )  * (world_size - 1))) + 60;
 
@@ -127,7 +127,7 @@ void indexing(TrieNode** clus_root, char* folder_name,  char* query_folder , int
     
     FILE* fpt = fopen(query_list[world_rank], "r");
 
-    int who[world_size];
+    // int who[world_size];
 
     i = 0;
     
@@ -160,36 +160,36 @@ void indexing(TrieNode** clus_root, char* folder_name,  char* query_folder , int
                 
                 word_buffer = convert_to_lower(all_words[finish_words++]);
                 Final_list = create_list();
-                memset(who, 0, world_size * sizeof(int));
+                // memset(who, 0, world_size * sizeof(int));
 
-                for(i = 0; i < world_size; i++ ){
-                    if(i != world_rank){
-                        who[i] = searchB(word_buffer, all_blooms + i * FILTER_SIZE);
-                    }
-                }
+                // for(i = 0; i < world_size; i++ ){
+                //     if(i != world_rank){
+                //         who[i] = searchB(word_buffer, all_blooms + i * FILTER_SIZE);
+                //     }
+                // }
 
                 for(i = 0; i < world_size; i++){
-                    if(who[i]){
-                        // printf("Sending: %s :: process - %d :: present - %d\n", word_buffer, world_rank, who[i]);
+                    if(i != world_rank){
+                        // printf("Sending: %s :: process - %d :: present\n", word_buffer, world_rank);
                         MPI_Send(word_buffer, strlen(word_buffer) + 1, MPI_CHAR, i, 1, MPI_COMM_WORLD);
                     }
                 }
 
 
                 
-                if(searchB(word_buffer, all_blooms + world_rank * FILTER_SIZE)){
-                    List* lst = clus_search(*clus_root, word_buffer);
-                    if(lst){
-                        Final_list = mergeLists(Final_list, lst);
-                    }
+                // if(searchB(word_buffer, all_blooms + world_rank * FILTER_SIZE)){
+                List* lst = clus_search(*clus_root, word_buffer);
+                if(lst){
+                    Final_list = mergeLists(Final_list, lst);
                 }
+                // }
 
                 for(i = 0; i < world_size; i++){
-                    if(who[i]){
+                    if(i != world_rank){
                         // MPI_Status* status;
-                        // printf("Recieving :: %s :: process - %d :: present - %d\n", word_buffer, world_rank, who[i]);
+                        // printf("Recieving :: %s :: process - %d :: \n", word_buffer, world_rank);
                         MPI_Recv(deser_data, max_deser, MPI_CHAR, i, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                        // printf("Recieved :: %s :: process - %d :: present - %d\n", deser_data, world_rank, who[i]);
+                        // printf("Recieved :: %s :: process - %d :: \n", deser_data, world_rank);
                         // printf("%d ::  %s\n",i , deser_data);
                         iter2 = 0;
                         all_lists[i] = deserialize_list(&deser_data, &iter2);
@@ -199,7 +199,7 @@ void indexing(TrieNode** clus_root, char* folder_name,  char* query_folder , int
                 
                 
                 for(i=0; i< world_size; i++){
-                    if(who[i]){
+                    if(i != world_rank){
                         Final_list = mergeLists(Final_list, all_lists[i]);
                     }
                 }
@@ -254,7 +254,7 @@ void indexing(TrieNode** clus_root, char* folder_name,  char* query_folder , int
         else{
 
             while(1){
-                memset(query, 0, 140*sizeof(char));
+                memset(query, 0, 140 * sizeof(char));
                 
                 MPI_Recv(query, 140, MPI_CHAR, master, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE );
                 
@@ -284,11 +284,13 @@ void indexing(TrieNode** clus_root, char* folder_name,  char* query_folder , int
                 if(list){
                     size2 = max_deser, iter2 = 0;
                     str2 = (char*) malloc(size2 * sizeof(char));
-                    memset(str2, 0, size2);
+                    memset(str2, 0, size2 * sizeof(char));
                     serialize_list(list, &str2, &iter2, &size2);
                     // printf("Slave : Data: %s :: len(Data): %ld :: size2: %d \n", str2, strlen(str2), size2);
                 }else{
-                    str2 = "-1\n";
+                    str2 = (char*) malloc(4 * sizeof(char));
+                    memset(str2, '\0', 4 * sizeof(char));
+                    memcpy(str2, "-1\n", 4 * sizeof(char));
                     size2 = 4;
                 }
                 MPI_Send(str2, size2, MPI_CHAR, master, 2, MPI_COMM_WORLD);

@@ -46,4 +46,6 @@ void serialize_list(List* list, char** fp, int* fp_count, int* fp_size);
 
 List* deserialize_list(char** fp, int* fp_count);
 
+List* copy_list(List* list);
+
 #endif

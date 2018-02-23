@@ -19,7 +19,9 @@ char** read_arr(FILE* fptr, int* size){
         }
     }
 
+
     *size = 571;
+
     return list_of_words;
 }
 

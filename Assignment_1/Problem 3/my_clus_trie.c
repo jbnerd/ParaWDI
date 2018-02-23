@@ -46,7 +46,7 @@ TrieNode* clus_insert(TrieNode *root, char *key, unsigned int frequency, char* d
     return root;
 }
  
-bool clus_search(struct TrieNode *root, const char *key){
+List* clus_search(struct TrieNode *root, const char *key){
     int depth, len = strlen(key), index;
     TrieNode* iter = root;
  
@@ -57,8 +57,8 @@ bool clus_search(struct TrieNode *root, const char *key){
         }
         iter = iter -> children[index];
     }
-    print_list(iter -> list);
-    return (iter != NULL && iter -> end);
+    // print_list(iter -> list);
+    return copy_list(iter -> list);
 }
 
 char* convert_to_lower(char* str){
