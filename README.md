@@ -1,6 +1,10 @@
-# Parallel Computing Course Assignment
+NOTE: @[jbnerd](https://github.com/jbnerd) will take care of this README !
 
-## Team
-* Arka Talukdar
-* [Abhishek V Joshi](https://github.com/jbnerd)
-* [Shyamal Vaderia](https://github.com/svaderia)
+# Dependencies
+* MPICH2
+
+## Instructions
+```shell
+mpicc -g stage2.c -o prime -lm
+mpirun -np 3 prime 100
+```
