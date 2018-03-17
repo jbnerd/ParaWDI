@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "_LINKED_LIST.h"
 
 List* create_list(){
@@ -183,41 +184,62 @@ List* mergeLists(List* list1, List* list2){
     return ret;
 }
 
-
-/*
-int main(){
-
-	Element* data = (Element*) malloc(sizeof(Element));
-	Element* data1 = (Element*) malloc(sizeof(Element));
-	Element* data2 = (Element*) malloc(sizeof(Element));
-
-    Element* data3 = (Element*) malloc(sizeof(Element));
-	Element* data4 = (Element*) malloc(sizeof(Element));
-	Element* data5 = (Element*) malloc(sizeof(Element));
-
-	data -> frequency = 9;
-	data1 -> frequency = 5;
-	data2 -> frequency = 2;
-    data3 -> frequency = 1;
-	data4 -> frequency = 7;
-	data5 -> frequency = 3;   
-
-	List* list = create_list();
-	list = insert_in_order(list, data);
-	list = insert_in_order(list, data1);
-	list = insert_in_order(list, data2);
-    list = insert_in_order(list, data3);
-    list = insert_in_order(list, data4);
-	print_list(list);
-
-    List* list2 = create_list();
-	// list2 = insert_in_order(list2, data3);
-	// list2 = insert_in_order(list2, data4);
-	// list2 = insert_in_order(list2, data5);
-	print_list(list2);
-
-    List* l3 = mergeLists(list, list2); 
-    print_list(l3);
-	return 0;
+List* copy_list(List* list){
+    List* ret_list = create_list();
+    Node* temp = list -> head;
+    while(temp != NULL){
+        Element* data_temp = (Element*) malloc(sizeof(Element));
+        data_temp -> frequency = temp -> ele -> frequency;
+        if(temp -> ele -> doc_name){
+            int len = strlen(temp -> ele -> doc_name);
+            data_temp -> doc_name = (char*) malloc((len + 1) * sizeof(char));
+            data_temp -> doc_name = memset(data_temp -> doc_name, '\0', (len + 1));
+            data_temp -> doc_name = memcpy(data_temp -> doc_name, temp -> ele -> doc_name, (len));
+        }else{
+            data_temp -> doc_name = NULL;
+        }
+        ret_list = insert_in_order(ret_list, data_temp);
+        temp = temp -> next;
+    }
+    return ret_list;
 }
-*/
+
+
+// int main(){
+
+// 	Element* data = (Element*) malloc(sizeof(Element));
+// 	Element* data1 = (Element*) malloc(sizeof(Element));
+// 	Element* data2 = (Element*) malloc(sizeof(Element));
+
+//     Element* data3 = (Element*) malloc(sizeof(Element));
+// 	Element* data4 = (Element*) malloc(sizeof(Element));
+// 	Element* data5 = (Element*) malloc(sizeof(Element));
+
+// 	data -> frequency = 9;
+// 	data1 -> frequency = 5;
+// 	data2 -> frequency = 2;
+//     data3 -> frequency = 1;
+// 	data4 -> frequency = 7;
+// 	data5 -> frequency = 3;   
+
+//     data -> doc_name = (char*) malloc(4 * sizeof(char));
+//     data -> doc_name = "lel";
+
+// 	List* list = create_list();
+// 	list = insert_in_order(list, data);
+// 	list = insert_in_order(list, data1);
+// 	list = insert_in_order(list, data2);
+//     list = insert_in_order(list, data3);
+//     list = insert_in_order(list, data4);
+// 	print_list(list);
+
+//     List* list2 = copy_list(list);
+// 	// list2 = insert_in_order(list2, data3);
+// 	// list2 = insert_in_order(list2, data4);
+// 	// list2 = insert_in_order(list2, data5);
+// 	print_list(list2);
+
+//     // List* l3 = mergeLists(list, list2); 
+//     // print_list(l3);
+// 	return 0;
+// }

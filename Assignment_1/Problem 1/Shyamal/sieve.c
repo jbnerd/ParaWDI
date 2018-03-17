@@ -21,11 +21,11 @@ void decompose_domain(int domain_size, int world_rank, int world_size, int* subd
     *subdomain_size = domain_size / world_size;
     if (world_rank == 0){
         *subdomain_start = 2;
-        *subdomain_size -= 1;
+        *subdomain_size -= 2;
     }
     if (world_rank == world_size - 1) {
         // Give remainder to last process
-        *subdomain_size += domain_size % world_size;
+        *subdomain_size = domain_size - *subdomain_start;
     }
 }
 

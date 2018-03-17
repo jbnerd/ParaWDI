@@ -7,7 +7,7 @@
 #include <mpi.h>
 #include <stdlib.h>
 #define UPPER_BOUND 10000000000
-#define MODE 0  // 0 to forsake CL-ARG
+#define MODE 1  // 0 to forsake CL-ARG
 #define PRINT 0 // 1 to print primes.
 #define PAGE 2500 // 
 
@@ -84,7 +84,7 @@ int removeComposites(long baseIndex, int limit , int* arr, int* rootPrimes, int 
 int main(int argc, char *argv[]){
     
     long limit, n_hi, n_lo;
-    if (argc > 0 && MODE == 1)
+    if (argc > 1 && MODE == 1)
         limit = (long)pow(10,atoi(argv[1]));
     else
         limit = UPPER_BOUND; // (long)pow(10,UPPER_BOUND); /*setting upper bound */
@@ -105,11 +105,12 @@ int main(int argc, char *argv[]){
 
     long lsqrt = (long) ceil(sqrt(limit));
     
-    if (lsqrt <= -1){
+    if (lsqrt < 10000){
      if(id == root){  
+        int ans = small(limit);
         wtime = MPI_Wtime() - wtime;
         printf("         N        Pi          Time\n");
-        printf("  %10ld    %10d  %16f\n", limit, small(limit), wtime);
+        printf("  %10ld    %10d  %16f\n", limit, ans, wtime);
         }
         MPI_Finalize();
         exit(0);

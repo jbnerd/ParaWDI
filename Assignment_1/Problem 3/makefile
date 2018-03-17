@@ -19,6 +19,10 @@ gdb2 : exe
 compileAll : merge_trie.o my_clus_trie.o my_doc_trie.o my_linked_list.o word_token.o driver.o serializer.o stopword_removal.o bfilter.o
 	mpicc -O3 -g -o exe merge_trie.o my_clus_trie.o my_doc_trie.o my_linked_list.o word_token.o driver.o serializer.o stopword_removal.o bfilter.o
 
+dompileAll : merge_trie.o my_clus_trie.o my_doc_trie.o my_linked_list.o word_token.o driver2.o serializer.o stopword_removal.o bfilter.o
+	mpicc -O3 -g -o exe merge_trie.o my_clus_trie.o my_doc_trie.o my_linked_list.o word_token.o driver2.o serializer.o stopword_removal.o bfilter.o
+
+
 serializer.o : serializer.c _TRIE.h _LINKED_LIST.h
 	mpicc -c -g serializer.c
 	
@@ -37,8 +41,11 @@ my_linked_list.o : my_linked_list.c _LINKED_LIST.h
 word_token.o : word_token.c _TOKENIZER.h
 	mpicc -c -g word_token.c
 
-driver.o : driver.c _LINKED_LIST.h _TOKENIZER.h _TRIE.h
+driver.o : driver.c _LINKED_LIST.h _TOKENIZER.h _TRIE.h _BFILTER.h
 	mpicc -c -g driver.c
+
+driver2.o : driver2.c _LINKED_LIST.h _TOKENIZER.h _TRIE.h _BFILTER.h
+	mpicc -c -g driver2.c
 
 bfilter.o : bfilter.c _BFILTER.h
 	mpicc -c -g bfilter.c
