@@ -149,7 +149,7 @@ int main(int argc, char** argv){
     //     printf("%d\n", all_primes[i]);
     // }
     
-    free(arr);
+    //free(arr);
     
     if(world_rank == root){
         wtime = MPI_Wtime() - wtime;
