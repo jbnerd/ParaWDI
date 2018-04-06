@@ -1,14 +1,5 @@
 run : exe
-	mpirun -np 1 ./exe
-
-run2 : exe
-	mpirun -np 2 ./exe
-
-run4 : exe
-	mpirun -np 4 ./exe
-
-run8 : exe
-	mpirun -np 8 ./exe
+	mpirun -np $(n) ./exe
 
 gdb : exe
 	mpirun -np 1 xterm -e gdb ./exe
@@ -18,7 +9,6 @@ gdb2 : exe
 
 compileAll : merge_trie.o my_clus_trie.o my_doc_trie.o my_linked_list.o word_token.o driver.o serializer.o
 	mpicc merge_trie.o my_clus_trie.o my_doc_trie.o my_linked_list.o word_token.o driver.o serializer.o
-
 
 serializer.o : serializer.c _TRIE.h _LINKED_LIST.h
 	mpicc -c -g serializer.c
