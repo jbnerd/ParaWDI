@@ -97,7 +97,7 @@
 | 4 | 63.69 | 313.8 | 16.25 |
 
 
-![Speedup Plot](Plots/WD_index_speedup.png)
+![Speedup Plot](./../Plots/WD_index_speedup.png)
 
 
 ### Dataset descriptions
