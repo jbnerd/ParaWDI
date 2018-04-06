@@ -26,7 +26,7 @@ char* getWord(FILE* fp, buffer b, int k){
 			if( eof ){
 				return temp;
 			}
-			memset(b, 0, sizeof(b));
+			memset(b, 0, k);
             fp = getStream(fp, b, k);
             offset = 0;
 		}
