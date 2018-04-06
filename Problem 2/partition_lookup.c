@@ -9,10 +9,20 @@ int* divide(int num_of_proc)
     for(int i = 0; i <26 ; i++)
     {   index[count] += 1;
         if(table[i] > ((count+1) * (100.00/num_of_proc)))
-        {   //printf("%d --- %d  -- %f --%f\n",i,count, table[i], ((count+1) * (100.00/num_of_proc)) );
+        {   //
             count+=1;
          }
+         ///printf("alphabet: %2d --- process: %2d  --C.freq of Alphabet %4f \n",i , count , table[i]);
     }
-  
+    //printf("\n\n\n\n");
     return index;
+}
+
+int main(){
+
+divide(2);
+divide(4);
+divide(8);
+divide(16);
+
 }
