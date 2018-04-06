@@ -84,7 +84,7 @@ void indexing(TrieNode** clus_root, char* folder_name,  char* query_folder , int
         FILE* fp = fopen(file_list[i], "r");
         if(!fp){
             perror("");
-            printf("File cannot be opened, please check it");
+            printf("File:: %s cannot be opened, please check it", file_list[i]);
             exit(1);
         }
 
@@ -254,7 +254,7 @@ void indexing(TrieNode** clus_root, char* folder_name,  char* query_folder , int
         else{
 
             while(1){
-                memset(query, 0, 140*sizeof(char));
+                memset(query, 0, 140 * sizeof(char));
                 
                 MPI_Recv(query, 140, MPI_CHAR, master, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE );
                 
@@ -284,11 +284,13 @@ void indexing(TrieNode** clus_root, char* folder_name,  char* query_folder , int
                 if(list){
                     size2 = max_deser, iter2 = 0;
                     str2 = (char*) malloc(size2 * sizeof(char));
-                    memset(str2, 0, size2);
+                    memset(str2, 0, size2 * sizeof(char)););
                     serialize_list(list, &str2, &iter2, &size2);
                     // printf("Slave : Data: %s :: len(Data): %ld :: size2: %d \n", str2, strlen(str2), size2);
                 }else{
-                    str2 = "-1\n";
+                    str2 = (char*) malloc(4 * sizeof(char));
+                    memset(str2, '\0', 4 * sizeof(char));
+                    memcpy(str2, "-1\n", 4 * sizeof(char));
                     size2 = 4;
                 }
                 MPI_Send(str2, size2, MPI_CHAR, master, 2, MPI_COMM_WORLD);
