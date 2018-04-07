@@ -1,14 +1,5 @@
 run : exe
-	mpirun -np 1 ./exe
-
-run2 : exe
-	mpirun -np 2 ./exe
-
-run4 : exe
-	mpirun -np 4 ./exe
-
-run8 : exe
-	mpirun -np 8 ./exe
+	mpirun -np $(n) ./exe
 
 gdb : exe
 	mpirun -np 1 xterm -e gdb ./exe

@@ -69,3 +69,17 @@
 ### Analysis
 
 - The speedup plot is a clear demonstration of scalability of the solution which uses Bloom Filters.
+
+## Compiling and Running
+
+- For compiling the code
+	- `make compileAll`
+- For running the program on `num` processes
+	- `make run n=num`
+- Example
+```bash
+	$ make compile
+	$ make run n=4
+```
+
+- Make sure to change the path name of the datasets depending upon your machine's storage
