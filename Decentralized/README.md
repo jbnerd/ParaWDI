@@ -82,4 +82,5 @@
 	$ make run n=4
 ```
 
+- `bloom_driver.c` is the driver file which uses the Bloom Filter whereas `driver.c` is without it. One can use this to compare the performance difference between the two systems.
 - Make sure to change the path name of the datasets depending upon your machine's storage
